@@ -1,0 +1,813 @@
+{% extends 'web/dashboard_layout.html' %}
+{% load static %}
+
+{% block title %}Create Employee - SkillsNxt{% endblock %}
+{% block page_title %}Create Employee{% endblock %}
+{% block breadcrumb %}Employee Management{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto">
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+    <!-- Success/Error Messages -->
+    <div id="message" class="mb-3 hidden w-full">
+      <div id="successMessage" class="bg-green-50 border border-green-200 text-green-700 px-3 py-2 rounded-lg hidden w-full">
+        <div class="flex items-center w-full">
+          <svg class="w-3 h-3 mr-2 flex-shrink-0 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+          </svg>
+          <span id="successText" class="flex-1 text-sm"></span>
+        </div>
+      </div>
+      <div id="errorMessage" class="bg-red-50 border border-red-200 text-red-700 px-3 py-2 rounded-lg hidden w-full">
+        <div class="flex items-center w-full">
+          <svg class="w-3 h-3 mr-2 flex-shrink-0 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+          </svg>
+          <span id="errorText" class="flex-1 text-sm"></span>
+        </div>
+      </div>
+    </div>
+
+    <form id="createEmployeeForm" class="space-y-3">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <!-- Employee Name -->
+        <div class="form-group">
+          <label class="form-label" for="name">Employee Name *</label>
+          <input 
+            type="text" 
+            id="name" 
+            name="name" 
+            required
+            class="form-input"
+            placeholder="Enter Full Name"
+          >
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="joining_date">Date of Birth *</label>
+          <input 
+            type="date" 
+            id="birth_date" 
+            name="birth_date" 
+            required
+            class="form-input"
+          >
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="designation">Gender *</label>
+          <select 
+            id="gender" 
+            name="gender" 
+            required
+            class="form-input"
+          >
+            <option value="">Select Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+          </select>
+        </div>
+
+        <!-- Designation -->
+        <div class="form-group">
+          <label class="form-label" for="designation">Designation *</label>
+          <select 
+            id="designation" 
+            name="designation" 
+            required
+            class="form-input"
+          >
+            <option value="">Select Designation</option>
+            <option value="Employee">Employee</option>
+            <option value="Trainer">Trainer</option>
+          </select>
+        </div>
+
+        <!-- Department -->
+        <div class="form-group">
+          <label class="form-label" for="department">Department *</label>
+          <select 
+            id="department" 
+            name="department" 
+            required
+            class="form-input"
+          >
+            <option value="">Select Department</option>
+            <option value="Teaching">Teaching</option>
+            <option value="Administration">Administration</option>
+            <option value="Sales">Sales</option>
+            <option value="Human Resources">Human Resources</option>
+            <option value="Operations">Operations</option>
+            <option value="Customer Support">Customer Support</option>
+          </select>
+        </div>
+
+        <!-- Joining Date -->
+        <div class="form-group">
+          <label class="form-label" for="joining_date">Date of Joining *</label>
+          <input 
+            type="date" 
+            id="joining_date" 
+            name="joining_date" 
+            required
+            class="form-input"
+          >
+        </div>
+
+        
+        <div class="form-group">
+          <label class="form-label" for="joining_date">Contact Number *</label>
+          <input 
+            type="text" 
+            id="contact_number" 
+            name="contact_number" 
+            required
+            class="form-input"
+            pattern="[0-9]{10}"
+            title="(10 Digit Number)"
+          >
+        </div>
+
+        <!-- User Email -->
+        <div class="form-group">
+          <label class="form-label" for="user_email">Email *</label>
+          <input 
+            type="email" 
+            id="user_email" 
+            name="user_email" 
+            required
+            class="form-input"
+            placeholder="Enter email address"
+            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+            title="Please enter a valid email address"
+          >
+          <div id="emailError" class="text-red-600 text-sm mt-1 hidden"></div>
+        </div>
+
+
+      </div>
+
+      <!-- File Uploads -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <!-- Photo Upload -->
+        <div class="form-group">
+          <label class="form-label" for="photo">Employee Photo</label>
+          <div class="mt-1 flex justify-center px-3 pt-3 pb-3 border-2 border-gray-300 border-dashed rounded-md">
+            <div class="space-y-1 text-center">
+              <div id="photoPreview" class="mb-2">
+                <!-- Photo preview will be shown here -->
+              </div>
+              <svg class="mx-auto h-8 w-8 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              <div class="flex text-sm text-gray-600">
+                <label for="photo" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                  <span>Upload a photo</span>
+                  <input id="photo" name="photo" type="file" class="sr-only" accept="image/*">
+                </label>
+                <p class="pl-1">or drag and drop</p>
+              </div>
+              <p class="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Resume Upload -->
+        <div class="form-group">
+          <label class="form-label" for="resume">Educational Certificate</label>
+          <div class="mt-1 flex justify-center px-3 pt-3 pb-3 border-2 border-gray-300 border-dashed rounded-md">
+            <div class="space-y-1 text-center">
+              <div id="resumePreview" class="mb-2">
+                <!-- Resume preview will be shown here -->
+              </div>
+              <svg class="mx-auto h-8 w-8 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              <div class="flex text-sm text-gray-600">
+                <label for="resume" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                  <span>Upload a Certificate</span>
+                  <input id="resume" name="resume" type="file" class="sr-only" accept=".pdf,.doc,.docx">
+                </label>
+                <p class="pl-1">or drag and drop</p>
+              </div>
+              <p class="text-xs text-gray-500">PDF, DOC, DOCX up to 10MB</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit Button and Messages -->
+      <div class="pt-3 border-t border-gray-200">
+        <!-- Success/Error Messages -->
+        <div id="submitMessage" class="mb-3 hidden">
+          <div id="submitSuccessMessage" class="bg-green-50 border border-green-200 text-green-700 px-3 py-2 rounded-lg hidden" style="background-color: #f0fdf4; border-color: #bbf7d0; color: #15803d;">
+            <div class="flex items-center">
+              <svg class="w-3 h-3 mr-2 flex-shrink-0 text-green-600" fill="currentColor" viewBox="0 0 20 20" style="width: 12px; height: 12px; color: #16a34a;">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+              </svg>
+              <span id="submitSuccessText" class="flex-1 text-sm" style="font-size: 14px;"></span>
+            </div>
+          </div>
+          <div id="submitErrorMessage" class="bg-red-50 border border-red-200 text-red-700 px-3 py-2 rounded-lg hidden" style="background-color: #fef2f2; border-color: #fecaca; color: #b91c1c;">
+            <div class="flex items-center">
+              <svg class="w-3 h-3 mr-2 flex-shrink-0 text-red-600" fill="currentColor" viewBox="0 0 20 20" style="width: 12px; height: 12px; color: #dc2626;">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+              </svg>
+              <span id="submitErrorText" class="flex-1 text-sm" style="font-size: 14px;"></span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="flex justify-end space-x-3 button-container">
+          <button 
+            type="button" 
+            onclick="window.location.href='/employees/'"
+            class="cancel-button"
+          >
+            Cancel
+          </button>
+          <button 
+            type="submit" 
+            id="submitBtn"
+            class="submit-button"
+          >
+            <span id="submitText">Create Employee</span>
+            <span id="submitSpinner" class="hidden">
+              <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Creating...
+            </span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<style>
+/* FIXED: Employee form page specific scrolling fixes */
+.max-w-6xl.mx-auto {
+  overflow-y: auto !important;
+  height: auto !important;
+  min-height: auto !important;
+  max-height: none !important;
+}
+
+.bg-white.rounded-lg.shadow-sm.border.border-gray-200.p-4 {
+  overflow-y: visible !important;
+  height: auto !important;
+  min-height: auto !important;
+  max-height: none !important;
+}
+
+/* Form styling to match login/register theme */
+.form-group {
+  margin-bottom: 0.75rem;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 0.25rem;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+  background: white;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.submit-button {
+  padding: 0.625rem 1.5rem;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.submit-button:hover {
+  background: #5a67d8;
+  transform: translateY(-1px);
+}
+
+.submit-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.cancel-button {
+  padding: 0.625rem 1.5rem;
+  background: white;
+  color: #374151;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cancel-button:hover {
+  background: #f9fafb;
+  border-color: #9ca3af;
+}
+
+/* Message styling */
+#message {
+  margin-bottom: 0.75rem;
+  width: 100%;
+}
+
+#successMessage, #errorMessage {
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+#successMessage {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  color: #166534;
+}
+
+#errorMessage {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+}
+
+/* Icon styling */
+#successMessage svg, #errorMessage svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+/* Text styling */
+#successText, #errorText {
+  flex: 1;
+  word-wrap: break-word;
+}
+
+/* Button container styling */
+.button-container {
+  display: flex !important;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: relative;
+  z-index: 10;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+  
+  /* Only apply to form grid layouts, not button containers */
+  .grid .flex.justify-end {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  /* Button container responsive behavior */
+  .button-container {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .submit-button, .cancel-button {
+    width: 100%;
+  }
+}
+
+/* FIXED: Override any conflicting height constraints */
+body > div:first-child {
+  overflow: visible !important;
+}
+
+.home_content {
+  overflow: visible !important;
+}
+
+.main-content {
+  overflow-y: auto !important;
+  height: auto !important;
+  min-height: auto !important;
+  max-height: none !important;
+}
+
+/* Ensure form content can scroll */
+#createEmployeeForm {
+  overflow-y: visible !important;
+  height: auto !important;
+  min-height: auto !important;
+  max-height: none !important;
+}
+</style>
+
+<script type="module">
+import { API } from "{% static 'web/js/api.js' %}";
+import { ensureToken } from "{% static 'web/js/guard.js' %}";
+
+const form = document.getElementById('createEmployeeForm');
+const message = document.getElementById('message');
+const successMessage = document.getElementById('successMessage');
+const errorMessage = document.getElementById('errorMessage');
+const successText = document.getElementById('successText');
+const errorText = document.getElementById('errorText');
+const submitBtn = document.getElementById('submitBtn');
+const submitText = document.getElementById('submitText');
+const submitSpinner = document.getElementById('submitSpinner');
+const emailError = document.getElementById('emailError');
+
+function showMessage(type, text) {
+  console.log('showMessage called:', type, text); // Debug log
+  
+  // Hide all messages first
+  message.classList.add('hidden');
+  successMessage.classList.add('hidden');
+  errorMessage.classList.add('hidden');
+  
+  // Clear previous text
+  successText.textContent = '';
+  errorText.textContent = '';
+  
+  // Show appropriate message
+  if (type === 'success') {
+    successText.textContent = text;
+    successMessage.classList.remove('hidden');
+    message.classList.remove('hidden');
+    // Reset display styles
+    message.style.display = '';
+    successMessage.style.display = '';
+    errorMessage.style.display = 'none';
+    console.log('Showing success message'); // Debug log
+  } else if (type === 'error' && text) {
+    errorText.textContent = text;
+    errorMessage.classList.remove('hidden');
+    message.classList.remove('hidden');
+    // Reset display styles
+    message.style.display = '';
+    errorMessage.style.display = '';
+    successMessage.style.display = 'none';
+    console.log('Showing error message'); // Debug log
+  }
+  // If type is 'error' but no text, don't show anything
+  
+  // Auto-hide after 5 seconds
+  setTimeout(() => {
+    message.classList.add('hidden');
+    successMessage.classList.add('hidden');
+    errorMessage.classList.add('hidden');
+  }, 5000);
+}
+
+function hideMessages() {
+  message.classList.add('hidden');
+  successMessage.classList.add('hidden');
+  errorMessage.classList.add('hidden');
+  successText.textContent = '';
+  errorText.textContent = '';
+  
+  // Force hide with display none as backup
+  message.style.display = 'none';
+  successMessage.style.display = 'none';
+  errorMessage.style.display = 'none';
+}
+
+function hideSubmitMessages() {
+  const messageDiv = document.getElementById('submitMessage');
+  const successDiv = document.getElementById('submitSuccessMessage');
+  const errorDiv = document.getElementById('submitErrorMessage');
+  const successText = document.getElementById('submitSuccessText');
+  const errorText = document.getElementById('submitErrorText');
+  
+  successText.textContent = '';
+  errorText.textContent = '';
+  
+  // Hide both messages
+  successDiv.classList.add('hidden');
+  errorDiv.classList.add('hidden');
+  messageDiv.classList.add('hidden');
+}
+
+function validateEmail(email) {
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  return emailRegex.test(email);
+}
+
+
+
+function showFieldError(element, message) {
+  element.classList.add('hidden');
+  element.textContent = message;
+  element.classList.remove('hidden');
+}
+
+function hideFieldError(element) {
+  element.classList.add('hidden');
+  element.textContent = '';
+}
+
+function ensureButtonsVisible() {
+  const buttonContainer = document.querySelector('.button-container');
+  const submitBtn = document.getElementById('submitBtn');
+  const cancelBtn = document.querySelector('.cancel-button');
+  
+  if (buttonContainer) {
+    buttonContainer.style.display = 'flex';
+    buttonContainer.style.visibility = 'visible';
+    buttonContainer.style.opacity = '1';
+  }
+  
+  if (submitBtn) {
+    submitBtn.style.display = 'flex';
+    submitBtn.style.visibility = 'visible';
+  }
+  
+  if (cancelBtn) {
+    cancelBtn.style.display = 'inline-block';
+    cancelBtn.style.visibility = 'visible';
+  }
+}
+
+// File upload preview functionality
+document.addEventListener('DOMContentLoaded', function() {
+  // Photo upload preview
+  document.getElementById('photo').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const photoPreview = document.getElementById('photoPreview');
+        if (photoPreview) {
+          photoPreview.innerHTML = `
+            <img src="${e.target.result}" alt="Preview" class="w-12 h-12 rounded-full object-cover mx-auto">
+          `;
+        }
+        
+        // Debug: Check if buttons are still visible
+        const buttonContainer = document.querySelector('.button-container');
+        const submitBtn = document.getElementById('submitBtn');
+        const cancelBtn = document.querySelector('.cancel-button');
+        
+        console.log('Button container:', buttonContainer);
+        console.log('Submit button:', submitBtn);
+        console.log('Cancel button:', cancelBtn);
+        
+        if (buttonContainer) {
+          console.log('Button container display:', window.getComputedStyle(buttonContainer).display);
+          console.log('Button container visibility:', window.getComputedStyle(buttonContainer).visibility);
+        }
+        
+        // Ensure buttons are visible
+        ensureButtonsVisible();
+      };
+      reader.onerror = function() {
+        console.error('Error reading file');
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  // Resume upload preview
+  document.getElementById('resume').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+      const resumePreview = document.getElementById('resumePreview');
+      if (resumePreview) {
+        resumePreview.innerHTML = `
+          <div class="flex items-center justify-center p-2 rounded">
+            <svg class="w-8 h-8 text-gray-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+            </svg>
+            <span class="text-sm text-gray-600">${file.name}</span>
+          </div>
+        `;
+      }
+      
+      // Debug: Check if buttons are still visible after resume upload
+      const buttonContainer = document.querySelector('.button-container');
+      console.log('After resume upload - Button container:', buttonContainer);
+      if (buttonContainer) {
+        console.log('Button container display:', window.getComputedStyle(buttonContainer).display);
+      }
+      
+      // Ensure buttons are visible
+      ensureButtonsVisible();
+    }
+  });
+});
+
+function setLoading(loading) {
+  if (loading) {
+    submitBtn.disabled = true;
+    submitText.classList.add('hidden');
+    submitSpinner.classList.remove('hidden');
+  } else {
+    submitBtn.disabled = false;
+    submitText.classList.remove('hidden');
+    submitSpinner.classList.add('hidden');
+  }
+}
+
+function showSubmitMessage(type, message) {
+  console.log('showSubmitMessage called:', type, message); // Debug log
+  
+  const messageDiv = document.getElementById('submitMessage');
+  const successDiv = document.getElementById('submitSuccessMessage');
+  const errorDiv = document.getElementById('submitErrorMessage');
+  const successText = document.getElementById('submitSuccessText');
+  const errorText = document.getElementById('submitErrorText');
+  
+  console.log('Elements found:', { messageDiv, successDiv, errorDiv, successText, errorText }); // Debug log
+  
+  // Hide both messages first
+  successDiv.classList.add('hidden');
+  errorDiv.classList.add('hidden');
+  messageDiv.classList.add('hidden');
+  
+  if (type === 'success') {
+    console.log('Showing success message'); // Debug log
+    successText.textContent = message;
+    successDiv.classList.remove('hidden');
+    messageDiv.classList.remove('hidden');
+    
+    console.log('Success div classes:', successDiv.className); // Debug log
+    
+    // Auto-hide success message after 5 seconds
+    setTimeout(() => {
+      messageDiv.classList.add('hidden');
+      successDiv.classList.add('hidden');
+    }, 5000);
+  } else if (type === 'error') {
+    console.log('Showing error message'); // Debug log
+    errorText.textContent = message;
+    errorDiv.classList.remove('hidden');
+    messageDiv.classList.remove('hidden');
+    
+    console.log('Error div classes:', errorDiv.className); // Debug log
+    
+    // Auto-hide error message after 8 seconds
+    setTimeout(() => {
+      messageDiv.classList.add('hidden');
+      errorDiv.classList.add('hidden');
+    }, 8000);
+  }
+}
+
+function resetFileFields() {
+  // Reset photo field
+  document.getElementById('photo').value = '';
+  document.getElementById('photoPreview').innerHTML = '';
+  
+  // Reset resume field
+  document.getElementById('resume').value = '';
+  document.getElementById('resumePreview').innerHTML = '';
+}
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  
+  // Hide any previous messages and field errors
+  hideMessages();
+  hideSubmitMessages();
+  hideFieldError(emailError);
+  
+  
+  // Get form data
+  const formData = new FormData(form);
+  const data = Object.fromEntries(formData.entries());
+  
+  // Validate email
+  if (!validateEmail(data.user_email)) {
+    showFieldError(emailError, 'Please enter a valid email address');
+    return;
+  }
+  
+  
+  
+  // Ensure token is valid before proceeding
+  try {
+    await ensureToken();
+    console.log('Token validation successful');
+  } catch (error) {
+    console.error('Token validation failed:', error);
+    showSubmitMessage('error', 'Authentication failed. Please log in again.');
+    setTimeout(() => {
+      window.location.href = '/';
+    }, 2000);
+    return;
+  }
+  
+  setLoading(true);
+  
+  try {
+    const formData = new FormData(form);
+    
+    console.log('Sending data with files');
+    console.log('Token:', localStorage.getItem('access') ? 'Present' : 'Missing');
+    const response = await API.post('employee/create/', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+    
+    if (response.data.success) {
+      showSubmitMessage('success', response.data.message);
+      form.reset();
+      // Reset file fields
+      resetFileFields();
+    } else {
+      showSubmitMessage('error', response.data.message || 'Failed to create employee');
+    }
+  } catch (error) {
+    console.error('Error creating employee:', error);
+    let errorMessage = 'Failed to create employee';
+    
+    // Handle authentication errors
+    if (error.response?.status === 401) {
+      errorMessage = 'Authentication failed. Please log in again.';
+      // Redirect to login after showing error
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 2000);
+    } else if (error.response?.status === 403) {
+      errorMessage = 'Access denied. Please check your permissions.';
+    } else if (error.response?.data?.errors) {
+      // Handle field-specific errors
+      const errors = error.response.data.errors;
+      let hasFieldErrors = false;
+      
+      if (errors.user_email) {
+        const emailErrorMsg = Array.isArray(errors.user_email) ? errors.user_email[0] : errors.user_email;
+        showFieldError(emailError, emailErrorMsg);
+        hasFieldErrors = true;
+      }
+      
+
+      
+      // Show general error message for other errors
+      const generalErrors = Object.entries(errors)
+        .filter(([key]) => !['user_email'].includes(key))
+        .map(([_, messages]) => {
+          if (Array.isArray(messages)) {
+            return messages[0];
+          }
+          return messages;
+        });
+      
+      if (generalErrors.length > 0) {
+        errorMessage = generalErrors.join(', ');
+      } else if (!hasFieldErrors) {
+        errorMessage = 'Please fix the validation errors above.';
+      }
+    } else if (error.response?.data?.message && error.response.data.message !== "Invalid data provided") {
+      errorMessage = error.response.data.message;
+    } else if (error.response?.data?.detail) {
+      errorMessage = error.response.data.detail;
+    } else if (error.message) {
+      errorMessage = error.message;
+    }
+    
+    if (errorMessage && errorMessage !== 'Please fix the validation errors above.') {
+      showSubmitMessage('error', errorMessage);
+    }
+  } finally {
+    setLoading(false);
+  }
+});
+
+// Set default date to today
+document.getElementById('joining_date').value = new Date().toISOString().split('T')[0];
+</script>
+{% endblock %} 

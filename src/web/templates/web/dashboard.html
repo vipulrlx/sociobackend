@@ -1,0 +1,321 @@
+{% extends 'web/dashboard_layout.html' %}
+{% load static %}
+
+{% block page_title %}Dashboard{% endblock %}
+
+<style>
+/* Apply scroll to home_content and remove from inner elements */
+.home_content {
+  overflow-y: auto !important;
+  height: 100vh !important;
+}
+
+.home_content .main-content {
+  overflow-y: visible !important;
+  height: auto !important;
+}
+
+.home_content .main-content > div {
+  overflow-y: visible !important;
+  height: auto !important;
+}
+</style>
+
+{% block content %}
+<div class="space-y-6">
+  <!-- KPI Cards Row -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
+    <!-- Total Student Enrolments -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-gray-600">Total Students</p>
+          <p class="text-3xl font-bold text-gray-900 mt-2" data-metric="total-students">-</p>
+        </div>
+        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+          <i class="fas fa-users text-blue-600 text-xl"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Total Count of Trainers -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-gray-600">Total Trainers</p>
+          <p class="text-3xl font-bold text-gray-900 mt-2" data-metric="total-trainers">-</p>
+        </div>
+        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+          <i class="fas fa-chalkboard-teacher text-green-600 text-xl"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Total Count of Franchises -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-gray-600">Total Franchises</p>
+          <p class="text-3xl font-bold text-gray-900 mt-2" data-metric="total-franchises">-</p>
+        </div>
+        <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+          <i class="fas fa-building text-purple-600 text-xl"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Total Courses -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-gray-600">Total Courses</p>
+          <p class="text-3xl font-bold text-gray-900 mt-2" data-metric="total-courses">-</p>
+        </div>
+        <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
+          <i class="fas fa-book text-orange-600 text-xl"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ongoing Courses -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-gray-600">Ongoing Courses</p>
+          <p class="text-3xl font-bold text-gray-900 mt-2" data-metric="ongoing-courses">-</p>
+        </div>
+        <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+          <i class="fas fa-play-circle text-red-600 text-xl"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Charts Row -->
+  <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+    <div style="display: flex; flex-direction: column; gap: 1.5rem;" id="chartsContainer">
+    <!-- Franchise wise Student Count (Pie Chart) -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6" style="width: 25%;">
+      <div class="flex items-center justify-between mb-6">
+        <h3 class="text-lg font-semibold text-gray-900">Franchise wise Student Count</h3>
+        <div class="flex space-x-2">
+        </div>
+      </div>
+      <div class="relative h-64">
+        <canvas id="franchisePieChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Stacked Bar Graph -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 flex flex-col" style="width: 75%;">
+      <div class="flex items-center justify-between mb-6">
+        <h3 class="text-lg font-semibold text-gray-900">Course Performance Overview</h3>
+      </div>
+      <div class="relative flex-1" style="min-height: 300px;">
+        <canvas id="courseBarChart"></canvas>
+      </div>
+    </div>
+    </div>
+  </div>
+
+  <!-- Course Data Table -->
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+    <div class="flex justify-between items-center mb-6">
+      <div>
+        <h2 class="text-xl font-semibold text-gray-800 mb-2">Course Management</h2>
+      </div>
+    </div>
+    
+    <div class="overflow-x-auto">
+      <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+          <thead class="text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+              <th scope="col" class="px-6 py-3">
+                Course Name
+              </th>
+              <th scope="col" class="px-6 py-3">
+                Duration
+              </th>
+              <th scope="col" class="px-6 py-3">
+                Completion Status
+              </th>
+              <th scope="col" class="px-6 py-3">
+                Total Students
+              </th>
+              <th scope="col" class="px-6 py-3">
+                Trainer Name
+              </th>
+            </tr>
+          </thead>
+                    <tbody>
+                        <!-- Course data will be loaded dynamically via JavaScript -->
+                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                            <td colspan="5" class="px-6 py-4 text-center text-gray-500">
+                                Loading course data...
+                            </td>
+                        </tr>
+                    </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Franchise Pie Chart
+  const franchiseCtx = document.getElementById('franchisePieChart').getContext('2d');
+  window.franchisePieChart = new Chart(franchiseCtx, {
+    type: 'doughnut',
+    data: {
+      labels: [],
+      datasets: [{
+        data: [],
+        backgroundColor: [
+          '#3B82F6', // Blue
+          '#10B981', // Green
+          '#F59E0B', // Yellow
+          '#EF4444', // Red
+          '#8B5CF6', // Purple
+          '#F97316'  // Orange
+        ],
+        borderWidth: 0,
+        hoverOffset: 4
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            padding: 20,
+            usePointStyle: true,
+            font: {
+              size: 12
+            }
+          }
+        },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              const label = context.label || '';
+              const value = context.parsed;
+              const total = context.dataset.data.reduce((a, b) => a + b, 0);
+              const percentage = ((value / total) * 100).toFixed(1);
+              return `${label}: ${value} students (${percentage}%)`;
+            }
+          }
+        }
+      }
+    }
+  });
+
+  // Course Bar Chart
+  const courseCtx = document.getElementById('courseBarChart').getContext('2d');
+  window.courseBarChart = new Chart(courseCtx, {
+    type: 'bar',
+    data: {
+      labels: [],
+      datasets: [
+        {
+          label: 'Total Students',
+          data: [],
+          backgroundColor: '#3B82F6',
+          borderRadius: 4,
+          borderSkipped: false,
+        },
+        {
+          label: 'Students with Jobs',
+          data: [],
+          backgroundColor: '#10B981',
+          borderRadius: 4,
+          borderSkipped: false,
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            padding: 20,
+            usePointStyle: true,
+            font: {
+              size: 12
+            }
+          }
+        },
+        tooltip: {
+          mode: 'index',
+          intersect: false,
+          callbacks: {
+            afterBody: function(context) {
+              const totalStudents = context[0].parsed.y;
+              const studentsWithJobs = context[1].parsed.y;
+              const jobPlacementRate = ((studentsWithJobs / totalStudents) * 100).toFixed(1);
+              return `Job Placement Rate: ${jobPlacementRate}%`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: {
+            display: false
+          }
+        },
+        y: {
+          beginAtZero: true,
+          grid: {
+            color: '#F3F4F6'
+          },
+          title: {
+            display: true,
+            text: 'Number of Students'
+          }
+        }
+      },
+      interaction: {
+        mode: 'nearest',
+        axis: 'x',
+        intersect: false
+      }
+    }
+  });
+});
+
+// Responsive charts layout
+function updateChartsLayout() {
+  const chartsContainer = document.getElementById('chartsContainer');
+  const pieChart = chartsContainer.children[0];
+  const barChart = chartsContainer.children[1];
+  
+  if (window.innerWidth >= 1024) {
+    // Desktop layout
+    chartsContainer.style.flexDirection = 'row';
+    pieChart.style.width = '25%';
+    barChart.style.width = '75%';
+  } else {
+    // Mobile layout
+    chartsContainer.style.flexDirection = 'column';
+    pieChart.style.width = '100%';
+    barChart.style.width = '100%';
+  }
+}
+
+// Update layout on page load and window resize
+document.addEventListener('DOMContentLoaded', updateChartsLayout);
+window.addEventListener('resize', updateChartsLayout);
+</script>
+
+<!-- Dashboard API Script -->
+<script src="{% static 'web/js/dashboard.js' %}"></script>
+{% endblock %}
+

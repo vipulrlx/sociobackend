@@ -1,0 +1,10 @@
+__pycache__/
+.DS_Store
+*~
+.venv/
+.env
+db.sqlite3
+media/
+node_modules/
+package-lock.json
+googlestorage.json

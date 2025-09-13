@@ -1,0 +1,1191 @@
+/* Sidebar Navigation Styles - Firefox Compatible */
+
+/* Adjust font size to make UI appear at proper size */
+html {
+  font-size: 90%; /* Reduce base font size to compensate for removed zoom */
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  background: #f9fafb;
+  overflow-x: hidden;
+}
+
+/* Remove zoom and transform scaling that causes Firefox issues */
+/* body {
+  zoom: 0.8;
+  -moz-transform: scale(0.8);
+  -moz-transform-origin: 0 0;
+} */
+
+/* Ensure full viewport usage with proper units */
+html, body {
+  height: 100vh !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow-x: hidden;
+}
+
+/* Use proper viewport height without compensation */
+html {
+  height: 100vh !important;
+  overflow-y: auto;
+}
+
+body {
+  height: 100vh !important;
+  min-height: 100vh !important;
+}
+
+/* CSS Variables for theming */
+:root {
+  --white-color: #fff;
+  --grey-color: #707070;
+  --grey-color-light: #aaa;
+  --blue-color: #4070f4;
+  --blue-color-sec: #5e8ce2;
+  --black-color: #000;
+  --black-color-light: #ccc;
+  --border-color: #e6e6e6;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --shadow-color-sec: rgba(0, 0, 0, 0.08);
+  --font-family: 'Poppins', sans-serif;
+  
+  /* Original dashboard colors */
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
+  --indigo-500: #6366f1;
+  --indigo-600: #4f46e5;
+  --blue-500: #3b82f6;
+  --blue-600: #2563eb;
+  --red-500: #ef4444;
+  --red-600: #dc2626;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-family);
+  background: var(--gray-50);
+}
+
+body.dark {
+  --white-color: #0a0a0a;
+  --grey-color: #fff;
+  --grey-color-light: #aaa;
+  --black-color: #fff;
+  --black-color-light: #ccc;
+  --border-color: #3d3d3d;
+  --shadow-color: rgba(255, 255, 255, 0.1);
+  --shadow-color-sec: rgba(255, 255, 255, 0.08);
+}
+
+/* Navbar - Updated to match original styling */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+  width: 100%;
+  background: var(--white-color);
+  padding: 0 30px;
+  box-shadow: 0 2px 10px var(--shadow-color);
+  transition: all 0.5s ease;
+  z-index: 1000;
+  border-bottom: 1px solid var(--gray-200);
+}
+
+.navbar .logo_item {
+  display: flex;
+  align-items: center;
+  column-gap: 10px;
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--gray-800);
+}
+
+.navbar .logo_item img {
+  width: 35px;
+  border-radius: 8px;
+}
+
+.navbar .search_bar {
+  height: 40px;
+  max-width: 410px;
+  width: 100%;
+}
+
+.navbar .search_bar input {
+  height: 100%;
+  width: 100%;
+  outline: none;
+  border: 2px solid var(--gray-200);
+  border-radius: 25px;
+  background-color: var(--white-color);
+  padding: 0 15px;
+  font-size: 15px;
+  color: var(--gray-800);
+}
+
+.navbar .search_bar input::placeholder {
+  color: var(--gray-500);
+}
+
+.navbar_content {
+  display: flex;
+  align-items: center;
+  column-gap: 20px;
+}
+
+.navbar_content i {
+  cursor: pointer;
+  font-size: 20px;
+  color: var(--gray-600);
+  transition: color 0.2s ease;
+}
+
+.navbar_content i:hover {
+  color: var(--gray-800);
+}
+
+/* User dropdown styling */
+.navbar_content .relative {
+  position: relative;
+}
+
+.navbar_content .flex {
+  display: flex;
+}
+
+.navbar_content .items-center {
+  align-items: center;
+}
+
+.navbar_content .space-x-3 > * + * {
+  margin-left: 0.75rem;
+}
+
+.navbar_content .p-2 {
+  padding: 0.5rem;
+}
+
+.navbar_content .hover\\:bg-gray-100:hover {
+  background-color: var(--gray-100);
+}
+
+.navbar_content .rounded-lg {
+  border-radius: 0.5rem;
+}
+
+.navbar_content .transition-colors {
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+}
+
+.navbar_content .duration-200 {
+  transition-duration: 200ms;
+}
+
+.navbar_content .w-8 {
+  width: 2rem;
+}
+
+.navbar_content .h-8 {
+  height: 2rem;
+}
+
+.navbar_content .bg-gradient-to-r {
+  background-image: linear-gradient(to right, var(--tw-gradient-stops));
+}
+
+.navbar_content .from-indigo-500 {
+  --tw-gradient-from: #6366f1;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(99, 102, 241, 0));
+}
+
+.navbar_content .to-purple-600 {
+  --tw-gradient-to: #9333ea;
+}
+
+.navbar_content .rounded-full {
+  border-radius: 9999px;
+}
+
+.navbar_content .flex.items-center.justify-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navbar_content .text-white {
+  color: #ffffff;
+}
+
+.navbar_content .text-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.navbar_content .font-medium {
+  font-weight: 500;
+}
+
+.navbar_content .text-left {
+  text-align: left;
+}
+
+.navbar_content .text-xs {
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+.navbar_content .text-gray-500 {
+  color: var(--gray-500);
+}
+
+.navbar_content .text-gray-800 {
+  color: var(--gray-800);
+}
+
+/* Dropdown menu styling */
+.navbar_content .absolute {
+  position: absolute;
+}
+
+.navbar_content .right-0 {
+  right: 0;
+}
+
+.navbar_content .mt-2 {
+  margin-top: 0.5rem;
+}
+
+.navbar_content .w-48 {
+  width: 12rem;
+}
+
+.navbar_content .bg-white {
+  background-color: var(--white-color);
+}
+
+.navbar_content .rounded-lg {
+  border-radius: 0.5rem;
+}
+
+.navbar_content .shadow-lg {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.navbar_content .border {
+  border-width: 1px;
+}
+
+.navbar_content .border-gray-200 {
+  border-color: var(--gray-200);
+}
+
+.navbar_content .py-2 {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.navbar_content .hidden {
+  display: none;
+}
+
+.navbar_content .block {
+  display: block;
+}
+
+.navbar_content .px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.navbar_content .text-gray-700 {
+  color: var(--gray-700);
+}
+
+.navbar_content .hover\\:bg-gray-100:hover {
+  background-color: var(--gray-100);
+}
+
+.navbar_content .my-2 {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.navbar_content .border-gray-200 {
+  border-color: var(--gray-200);
+}
+
+.navbar_content .w-full {
+  width: 100%;
+}
+
+.navbar_content .text-left {
+  text-align: left;
+}
+
+.navbar_content .text-red-600 {
+  color: var(--red-600);
+}
+
+.navbar_content .hover\\:bg-red-50:hover {
+  background-color: #fef2f2;
+}
+
+.navbar_content .mr-2 {
+  margin-right: 0.5rem;
+}
+
+/* Sidebar - Updated to match original styling */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh !important; /* Use proper viewport height */
+  width: 260px;
+  background: var(--white-color);
+  z-index: 100;
+  transition: all 0.5s ease;
+  box-shadow: 0 0 10px var(--shadow-color);
+  border-right: 1px solid var(--gray-200);
+}
+
+/* Sidebar compressed state - only when toggled */
+.sidebar.compressed {
+  width: 75px;
+}
+
+.sidebar .logo_details {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding: 0 20px;
+  border-bottom: 1px solid var(--gray-200);
+  /* Left align in expanded view */
+  justify-content: flex-start;
+  /* Ensure proper left alignment */
+  text-align: left;
+}
+
+.sidebar .logo_details .icon {
+  opacity: 0;
+  transition: all 0.5s ease;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  /* Ensure icon is left-aligned */
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+
+.sidebar .logo_details .logo_name {
+  color: var(--gray-800);
+  font-size: 18px; /* Reduced from 20px */
+  font-weight: 600;
+  opacity: 1;
+  transition: all 0.5s ease;
+  /* Left align text */
+  text-align: left;
+  /* Remove margin to ensure proper left alignment */
+  margin-left: 0;
+  /* Ensure text doesn't wrap */
+  white-space: nowrap;
+}
+
+.sidebar.compressed .logo_details {
+  /* Center in compressed view */
+  justify-content: center;
+}
+
+.sidebar.compressed .logo_details .icon {
+  opacity: 1;
+  margin-right: 0;
+}
+
+.sidebar.compressed .logo_details .logo_name {
+  opacity: 0;
+  margin-left: 0;
+}
+
+.sidebar .logo_details #sidebar_btn {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  height: 35px;
+  width: 35px;
+  text-align: center;
+  border-radius: 50%;
+  cursor: pointer;
+  background: var(--blue-500);
+  border: none;
+  color: var(--white-color);
+  font-size: 16px; /* Reduced from 18px */
+  transition: all 0.5s ease;
+}
+
+.sidebar .logo_details #sidebar_btn:hover {
+  background: var(--blue-600);
+}
+
+.sidebar .nav_list {
+  height: calc(100vh - 60px); /* Use proper viewport height */
+  padding: 0;
+  overflow: auto;
+}
+
+.sidebar .nav_list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sidebar .nav_list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar .nav_list::-webkit-scrollbar-thumb {
+  background: var(--gray-300);
+  border-radius: 2px;
+}
+
+.sidebar .nav_list::-webkit-scrollbar-thumb:hover {
+  background: var(--gray-400);
+}
+
+.sidebar .nav_list li {
+  position: relative;
+  margin: 6px 12px; /* Reduced from 8px 15px */
+  list-style: none;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.sidebar .nav_list li .iocn_link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sidebar .nav_list li i {
+  height: 32px; /* Reduced from 35px */
+  min-width: 32px; /* Reduced from 35px */
+  text-align: center;
+  line-height: 32px; /* Reduced from 35px */
+  border-radius: 6px;
+  color: var(--gray-600);
+  font-size: 16px; /* Reduced from 18px */
+  transition: all 0.5s ease;
+  /* Center the icon in the compressed state */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Ensure icon is centered in its container */
+  margin: 0 auto;
+}
+
+/* Hide arrow icon in compressed mode */
+.sidebar.compressed .nav_list li i.arrow {
+  display: none;
+}
+
+.sidebar .nav_list li.showMenu i.arrow {
+  transform: rotate(-180deg);
+}
+
+.sidebar .nav_list li a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  padding: 6px 10px; /* Reduced from 8px 12px */
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  /* Ensure proper alignment */
+  position: relative;
+  /* Keep text left-aligned */
+  justify-content: flex-start;
+  /* Ensure proper spacing */
+  gap: 5px;
+}
+
+.sidebar .nav_list li a .link_name {
+  color: var(--gray-700);
+  font-size: 13px; /* Reduced from 15px */
+  font-weight: 500;
+  white-space: nowrap;
+  opacity: 1;
+  pointer-events: auto;
+  transition: all 0.4s ease;
+  /* Remove margin to use gap instead */
+  margin-left: 0;
+  /* Ensure left alignment */
+  text-align: left;
+  /* Ensure proper flex behavior */
+  flex: 1;
+}
+
+.sidebar .nav_list li a i {
+  /* Ensure icon is properly sized and aligned */
+  min-width: 32px; /* Reduced from 35px */
+  height: 32px; /* Reduced from 35px */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Remove auto margin to use flexbox gap */
+  margin: 0;
+  /* Ensure icon doesn't shrink */
+  flex-shrink: 0;
+}
+
+.sidebar .nav_list li a i.arrow {
+  /* Position arrow on the right */
+  margin-left: auto;
+  margin-right: 0;
+}
+
+.sidebar.compressed .nav_list li a {
+  justify-content: center;
+  padding: 6px 0; /* Reduced from 8px 0 */
+  gap: 0;
+}
+
+.sidebar.compressed .nav_list li a .link_name {
+  opacity: 0;
+  pointer-events: none;
+  margin-left: 0;
+  width: 0;
+  overflow: hidden;
+  flex: 0;
+}
+
+.sidebar.compressed .nav_list li a i {
+  margin: 0;
+}
+
+.sidebar.compressed .nav_list li a i.arrow {
+  display: none;
+}
+
+.sidebar .nav_list li .sub_menu {
+  padding: 4px 4px 0px 12px; /* Reduced from 6px 6px 0px 15px */
+  margin-top: -8px; /* Reduced from -10px */
+  display: none;
+}
+
+.sidebar .nav_list li.showMenu .sub_menu {
+  display: block;
+}
+
+/* Ensure submenus are hidden in normal expanded state when not active */
+.sidebar:not(.compressed) .nav_list li .sub_menu {
+  display: none;
+}
+
+.sidebar:not(.compressed) .nav_list li.showMenu .sub_menu {
+  display: block;
+}
+
+.sidebar .nav_list li .sub_menu li {
+  margin: 6px 0; /* Reduced from 8px 0 */
+  list-style: none;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.sidebar .nav_list li .sub_menu li a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  padding: 6px 10px; /* Reduced from 8px 12px */
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  position: relative;
+  justify-content: flex-start;
+  gap: 5px;
+  color: var(--gray-600);
+  font-size: 13px; /* Reduced from 15px */
+  white-space: nowrap;
+  opacity: 0.8;
+}
+
+.sidebar .nav_list li .sub_menu li a i {
+  min-width: 32px; /* Reduced from 35px */
+  height: 32px; /* Reduced from 35px */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  flex-shrink: 0;
+  color: var(--gray-600);
+  font-size: 16px; /* Reduced from 18px */
+}
+
+.sidebar .nav_list li .sub_menu li a .link_name {
+  color: var(--gray-600);
+  font-size: 13px; /* Reduced from 15px */
+  font-weight: 500;
+  white-space: nowrap;
+  opacity: 1;
+  pointer-events: auto;
+  transition: all 0.4s ease;
+  margin-left: 0;
+  text-align: left;
+  flex: 1;
+  /* Ensure text is visible */
+  display: block;
+}
+
+.sidebar .nav_list li .sub_menu li a:hover {
+  opacity: 1;
+  color: var(--gray-800);
+  background: var(--gray-100);
+}
+
+.sidebar .nav_list li .sub_menu li a:hover i {
+  color: var(--gray-700);
+}
+
+/* Active state for submenu items */
+.nav_list li .sub_menu li a.active {
+  color: var(--white-color);
+  background: var(--indigo-500);
+  border-radius: 8px;
+  opacity: 1;
+}
+
+.nav_list li .sub_menu li a.active i,
+.nav_list li .sub_menu li a.active .link_name {
+  color: var(--white-color);
+}
+
+.nav_list li .sub_menu li a.active:hover {
+  background: var(--indigo-600);
+}
+
+/* Hover effects for submenu items */
+.nav_list li .sub_menu li a:hover {
+  color: var(--gray-800);
+  background: var(--gray-100);
+  border-radius: 8px;
+  opacity: 1;
+}
+
+.nav_list li .sub_menu li a:hover i {
+  color: var(--gray-700);
+}
+
+.sidebar.compressed .nav_list li .sub_menu {
+  display: none;
+}
+
+/* Ensure proper positioning for compressed sidebar items */
+.sidebar.compressed .nav_list li {
+  position: relative;
+}
+
+
+
+.sidebar .nav_list li .sub_menu.blank {
+  opacity: 1;
+  pointer-events: auto;
+  padding: 2px 16px 4px 12px; /* Reduced from 3px 20px 6px 16px */
+  opacity: 0;
+  pointer-events: none;
+}
+
+.sidebar .nav_list li:hover .sub_menu.blank {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* FIXED: Main Content Area - Updated to match original styling */
+.home_content {
+  position: relative;
+  height: 100vh !important; /* Use proper viewport height */
+  left: 260px;
+  width: calc(100% - 260px);
+  transition: all 0.5s ease;
+  padding-top: 60px; /* Account for navbar */
+  background: var(--gray-50);
+  overflow-y: auto !important;
+  /* overflow: hidden !important; */ /* Prevent home_content scroll */
+}
+
+/* Content adjustment when sidebar is compressed */
+.sidebar.compressed ~ .home_content {
+  left: 75px;
+  width: calc(100% - 75px);
+}
+
+.home_content .text {
+  font-size: 26px;
+  font-weight: 500;
+  color: var(--gray-800);
+  font-family: var(--font-family);
+  margin: 12px;
+  padding-left: 20px;
+  padding-top: 5px;
+}
+
+/* FIXED: Main content styling - Match original dashboard */
+.main-content {
+  padding: 40px 30px 30px 30px;
+  /* overflow-y: auto !important; */
+  /* height: calc(100vh - 20px) !important; */
+  min-height: 0 !important;
+}
+
+/* Card styling for dashboard content - Match original */
+.main-content .bg-white {
+  background: var(--white-color);
+  border-radius: 8px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--gray-200);
+}
+
+.main-content .rounded-lg {
+  border-radius: 8px;
+}
+
+.main-content .shadow-sm {
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.main-content .border {
+  border: 1px solid var(--gray-200);
+}
+
+.main-content .border-gray-200 {
+  border-color: var(--gray-200);
+}
+
+.main-content .p-6 {
+  padding: 1.5rem;
+}
+
+.main-content .text-lg {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+
+.main-content .font-semibold {
+  font-weight: 600;
+}
+
+.main-content .text-gray-800 {
+  color: var(--gray-800);
+}
+
+.main-content .mb-4 {
+  margin-bottom: 1rem;
+}
+
+.main-content .h-80 {
+  height: 20rem;
+}
+
+/* Hover effects - Match original styling */
+.sidebar .nav_list li a:hover {
+  background: var(--gray-100);
+  color: var(--gray-800);
+}
+
+.sidebar .nav_list li a:hover i,
+.sidebar .nav_list li a:hover .link_name {
+  color: var(--gray-800);
+}
+
+.sidebar .nav_list li a.active {
+  background: var(--indigo-500);
+  color: var(--white-color);
+}
+
+.sidebar .nav_list li a.active i,
+.sidebar .nav_list li a.active .link_name {
+  color: var(--white-color);
+}
+
+/* Menu sections */
+.menu_section {
+  margin: 16px 0; /* Reduced from 20px 0 */
+}
+
+.menu_section .menu_title {
+  font-size: 11px; /* Reduced from 12px */
+  font-weight: 600;
+  color: var(--gray-500);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 0 12px; /* Reduced from 0 15px */
+  margin-bottom: 8px; /* Reduced from 10px */
+}
+
+.sidebar.compressed .menu_title {
+  display: none;
+}
+
+/* Icon styles */
+.bx {
+  font-size: 16px; /* Reduced from 18px */
+}
+
+/* Animation for submenu */
+.sub_menu {
+  transition: all 0.3s ease;
+}
+
+/* Hover effects - Match original */
+.nav_list li:hover {
+  background: var(--gray-100);
+  border-radius: 8px;
+}
+
+.nav_list li:hover i {
+  color: var(--gray-700);
+}
+
+/* Active state - Match original */
+.nav_list li.active {
+  background: var(--indigo-500);
+  border-radius: 8px;
+}
+
+.nav_list li.active i,
+.nav_list li.active .link_name {
+  color: var(--white-color);
+}
+
+/* Active state for main menu items (not submenu items) */
+.nav_list > li.active {
+  background: var(--indigo-500);
+  border-radius: 8px;
+}
+
+.nav_list > li.active > a i,
+.nav_list > li.active > a .link_name {
+  color: var(--white-color);
+}
+
+/* Override for parent menu when submenu is active - only highlight the parent link, not the entire li */
+.nav_list > li.active.showMenu {
+  background: transparent;
+}
+
+.nav_list > li.active.showMenu > a {
+  background: var(--indigo-500);
+  border-radius: 8px;
+}
+
+.nav_list > li.active.showMenu > a i,
+.nav_list > li.active.showMenu > a .link_name {
+  color: var(--white-color);
+}
+
+/* Active state for submenu items */
+.nav_list li .sub_menu li a.active {
+  color: var(--white-color);
+  background: var(--indigo-500);
+  border-radius: 8px;
+  opacity: 1;
+}
+
+.nav_list li .sub_menu li a.active i,
+.nav_list li .sub_menu li a.active .link_name {
+  color: var(--white-color);
+}
+
+.nav_list li .sub_menu li a.active:hover {
+  background: var(--indigo-600);
+}
+
+/* Hover effects for submenu items */
+.nav_list li .sub_menu li a:hover {
+  color: var(--gray-800);
+  background: var(--gray-100);
+  border-radius: 8px;
+  opacity: 1;
+}
+
+.nav_list li .sub_menu li a:hover i {
+  color: var(--gray-700);
+}
+
+/* Responsive - Only hide on mobile */
+@media (max-width: 768px) {
+  .sidebar {
+    left: -100%;
+  }
+  
+  .sidebar.open {
+    left: 0;
+  }
+  
+  .home_content {
+    left: 0;
+    width: 100%;
+  }
+  
+  .sidebar.compressed ~ .home_content {
+    left: 0;
+    width: 100%;
+  }
+  
+  .navbar .search_bar {
+    display: none;
+  }
+}
+
+/* Additional utility classes for compatibility with original styling */
+.bg-gray-50 {
+  background-color: var(--gray-50);
+}
+
+.text-gray-600 {
+  color: var(--gray-600);
+}
+
+.text-gray-500 {
+  color: var(--gray-500);
+}
+
+.text-gray-700 {
+  color: var(--gray-700);
+}
+
+.text-gray-800 {
+  color: var(--gray-800);
+}
+
+.text-2xl {
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.text-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.font-medium {
+  font-weight: 500;
+}
+
+.flex {
+  display: flex;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.space-x-3 > * + * {
+  margin-left: 0.75rem;
+}
+
+.w-12 {
+  width: 3rem;
+}
+
+.h-12 {
+  height: 3rem;
+}
+
+.rounded-lg {
+  border-radius: 0.5rem;
+}
+
+.bg-gradient-to-r {
+  background-image: linear-gradient(to right, var(--tw-gradient-stops));
+}
+
+.from-blue-500 {
+  --tw-gradient-from: #3b82f6;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(59, 130, 246, 0));
+}
+
+.to-blue-600 {
+  --tw-gradient-to: #2563eb;
+}
+
+.from-green-500 {
+  --tw-gradient-from: #10b981;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(16, 185, 129, 0));
+}
+
+.to-green-600 {
+  --tw-gradient-to: #059669;
+}
+
+.from-purple-500 {
+  --tw-gradient-from: #8b5cf6;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(139, 92, 246, 0));
+}
+
+.to-purple-600 {
+  --tw-gradient-to: #7c3aed;
+}
+
+.from-orange-500 {
+  --tw-gradient-from: #f97316;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(249, 115, 22, 0));
+}
+
+.to-orange-600 {
+  --tw-gradient-to: #ea580c;
+}
+
+.text-white {
+  color: #ffffff;
+}
+
+.text-lg {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+
+/* Grid layout for KPI cards */
+.grid {
+  display: grid;
+}
+
+.grid-cols-1 {
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+.grid-cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.grid-cols-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.gap-6 {
+  gap: 1.5rem;
+}
+
+/* Responsive grid */
+@media (max-width: 1024px) {
+  .lg\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .md\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .sm\:grid-cols-1 {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+}
+
+/* Card hover effects - Match original */
+.card-hover {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Custom animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Firefox-specific fixes */
+@-moz-document url-prefix() {
+  /* Fix for Firefox layout issues */
+  body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  /* Ensure proper flex behavior in Firefox */
+  .home_content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Fix for Firefox viewport height issues */
+  .sidebar {
+    height: 100vh !important;
+    min-height: 100vh !important;
+  }
+  
+  /* Ensure main content uses full available space */
+  main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Fix for Firefox absolute positioning */
+  .absolute {
+    position: absolute !important;
+  }
+  
+  /* Ensure proper stacking context in Firefox */
+  .relative {
+    position: relative !important;
+  }
+  
+  /* Fix for Firefox flexbox issues */
+  .flex {
+    display: flex !important;
+  }
+  
+  /* Ensure proper grid behavior in Firefox */
+  .grid {
+    display: grid !important;
+  }
+  
+  /* Fix for Firefox transform issues */
+  .transform {
+    transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y)) !important;
+  }
+} 

@@ -1,0 +1,364 @@
+{% extends 'web/dashboard_layout.html' %}
+{% load static %}
+
+{% block title %}Employee Details - SkillsNxt{% endblock %}
+{% block page_title %}Employee Details{% endblock %}
+{% block breadcrumb %}Employees{% endblock %}
+
+{% block content %}
+<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+  <div class="mx-auto max-w-3xl">
+    <!-- Header -->
+    <div class="mb-8">
+      <div class="flex items-center justify-between">
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900">Profile</h1>
+          <p class="text-sm text-gray-600 mt-1">Employee information and details</p>
+        </div>
+        <div class="flex items-center space-x-3">
+          <a href="{% url 'web:employee_list' %}" class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200 shadow-sm">
+            <svg class="w-4 h-4 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+            </svg>
+            <span>Back</span>
+          </a>
+          <button id="editButton" class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200 shadow-sm">
+            <svg class="w-4 h-4 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+            </svg>
+            <span>Edit</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    <div id="loadingState" class="text-center py-8">
+      <div class="inline-flex items-center px-4 py-2 font-semibold leading-6 text-sm shadow rounded-md text-white bg-indigo-500 hover:bg-indigo-400 transition ease-in-out duration-150 cursor-not-allowed">
+        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        Loading employee details...
+      </div>
+    </div>
+
+    <!-- Employee Details -->
+    <div id="employeeDetails" class="hidden">
+      <!-- Profile Header -->
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+        <div class="flex items-center">
+          <div id="employeePhoto" class="mr-4 cursor-pointer" style="margin-right: 3vh; cursor: pointer;">
+            <!-- Photo will be loaded here -->
+          </div>
+          <div class="flex-1">
+            <h2 id="employeeName" class="text-xl font-semibold text-gray-900 mb-1"></h2>
+            <p id="employeeDesignation" class="text-sm text-gray-600 mb-1"></p>
+            <p id="employeeId" class="text-sm text-gray-500">Employee ID: <span class="font-medium text-gray-900"></span></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Personal Information -->
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-semibold text-gray-900">Personal Information</h3>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Department</label>
+            <p id="employeeDepartment" class="text-gray-900"></p>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Joining Date</label>
+            <p id="employeeJoiningDate" class="text-gray-900"></p>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <p id="employeeEmail" class="text-gray-900"></p>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+            <p id="employeePhone" class="text-gray-900"></p>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Created Date</label>
+            <p id="employeeCreatedAt" class="text-gray-900"></p>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Last Updated</label>
+            <p id="employeeUpdatedAt" class="text-gray-900"></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resume Section -->
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-semibold text-gray-900">Resume</h3>
+        </div>
+        <div id="resumeSection">
+          <!-- Resume will be loaded here -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Error State -->
+    <div id="errorState" class="hidden text-center py-12">
+      <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+      </svg>
+      <h3 id="errorTitle" class="mt-2 text-sm font-medium text-gray-900">Employee not found</h3>
+      <p id="errorMessage" class="mt-1 text-sm text-gray-500">The employee you're looking for doesn't exist or has been removed.</p>
+      <div class="mt-6">
+        <a href="{% url 'web:employee_list' %}" class="btn-primary">
+          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+          </svg>
+          Back to List
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Photo Popup Modal -->
+<div id="photoModal" class="fixed inset-0 bg-black bg-opacity-75 overflow-y-auto h-full w-full hidden z-[99999]">
+  <div class="flex items-center justify-center min-h-screen p-4" onclick="closePhotoModal()">
+    <div class="relative max-w-4xl mx-auto" onclick="event.stopPropagation()">
+      <div class="bg-white rounded-lg shadow-xl p-4">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-lg font-semibold text-gray-900">Employee Photo</h3>
+          <button onclick="closePhotoModal()" class="text-gray-400 hover:text-gray-600 transition-colors duration-200">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+        <div class="flex justify-center">
+          <img id="modalPhoto" class="max-w-full max-h-96 object-contain rounded-lg" src="" alt="Employee Photo">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+/* FIXED: Employee detail page specific scrolling fixes */
+.mx-auto.max-w-7xl.px-4.sm\\:px-6.lg\\:px-8 {
+  overflow-y: auto !important;
+  height: auto !important;
+  min-height: auto !important;
+  max-height: none !important;
+}
+
+.mx-auto.max-w-3xl {
+  overflow-y: visible !important;
+  height: auto !important;
+  min-height: auto !important;
+  max-height: none !important;
+}
+
+/* FIXED: Override any conflicting height constraints */
+body > div:first-child {
+  overflow: visible !important;
+}
+
+.home_content {
+  overflow: visible !important;
+}
+
+.main-content {
+  overflow-y: auto !important;
+  height: auto !important;
+  min-height: auto !important;
+  max-height: none !important;
+}
+
+/* Ensure detail content can scroll */
+#employeeDetails {
+  overflow-y: visible !important;
+  height: auto !important;
+  min-height: auto !important;
+  max-height: none !important;
+}
+</style>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let employee = null;
+const employeeId = {{ employee_id }};
+
+// Load employee details on page load
+document.addEventListener('DOMContentLoaded', function() {
+    loadEmployeeDetails();
+});
+
+async function loadEmployeeDetails() {
+    try {
+        showLoading();
+        
+        // Use fetch with JWT authentication
+        const token = localStorage.getItem('access');
+        if (!token) {
+            window.location.href = '/login/';
+            return;
+        }
+        
+        const response = await fetch(`/api/v1/employee/${employeeId}/`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (response.status === 403) {
+            showPermissionError();
+            return;
+        }
+
+        const data = await response.json();
+        
+        if (data.success) {
+            employee = data.employee;
+            displayEmployeeDetails();
+        } else {
+            showError();
+        }
+    } catch (error) {
+        console.error('Error loading employee details:', error);
+        showError();
+    } finally {
+        hideLoading();
+    }
+}
+
+function displayEmployeeDetails() {
+    if (!employee) {
+        showError();
+        return;
+    }
+
+    // Set basic information
+    document.getElementById('employeeName').textContent = employee.name;
+    document.getElementById('employeeDesignation').textContent = employee.designation;
+    document.getElementById('employeeId').textContent = employee.employee_id;
+    document.getElementById('employeeDepartment').textContent = employee.department;
+    document.getElementById('employeeJoiningDate').textContent = new Date(employee.joining_date).toLocaleDateString();
+    document.getElementById('employeeEmail').textContent = employee.email || 'N/A';
+    document.getElementById('employeePhone').textContent = employee.phone || 'N/A';
+    document.getElementById('employeeCreatedAt').textContent = new Date(employee.created_at).toLocaleDateString();
+    document.getElementById('employeeUpdatedAt').textContent = new Date(employee.updated_at).toLocaleDateString();
+
+    // Set photo
+    const photoContainer = document.getElementById('employeePhoto');
+    if (employee.photo_url) {
+        photoContainer.innerHTML = `
+            <img class="h-12 w-12 rounded-full object-cover cursor-pointer hover:opacity-80 transition-opacity duration-200" 
+                 src="${employee.photo_url}" alt="${employee.name}" onclick="openPhotoModal('${employee.photo_url}', '${employee.name}')">
+        `;
+    } else {
+        photoContainer.innerHTML = `
+            <div class="h-12 w-12 rounded-full bg-gray-300 flex items-center justify-center cursor-pointer hover:opacity-80 transition-opacity duration-200" onclick="openPhotoModal(null, '${employee.name}')">
+                <span class="text-sm font-semibold text-gray-600">${employee.name.charAt(0).toUpperCase()}</span>
+            </div>
+        `;
+    }
+
+    // Set resume
+    const resumeSection = document.getElementById('resumeSection');
+    if (employee.resume_url) {
+        resumeSection.innerHTML = `
+            <div class="flex items-center justify-between p-4 rounded-lg border">
+                <div class="flex items-center">
+                    <svg class="h-5 w-5 text-gray-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    <span class="text-gray-900">Resume</span>
+                </div>
+                <a href="${employee.resume_url}" target="_blank" class="inline-flex items-center px-3 py-2 text-sm font-medium text-blue-600 hover:text-blue-700">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    Download
+                </a>
+            </div>
+        `;
+    } else {
+        resumeSection.innerHTML = `
+            <div class="text-center py-8">
+                <svg class="mx-auto h-8 w-8 text-gray-400 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                <p class="text-sm text-gray-500">No resume uploaded</p>
+            </div>
+        `;
+    }
+
+    // Show the details
+    document.getElementById('employeeDetails').classList.remove('hidden');
+}
+
+function showLoading() {
+    document.getElementById('loadingState').classList.remove('hidden');
+    document.getElementById('employeeDetails').classList.add('hidden');
+    document.getElementById('errorState').classList.add('hidden');
+}
+
+function hideLoading() {
+    document.getElementById('loadingState').classList.add('hidden');
+}
+
+function showError() {
+    document.getElementById('errorTitle').textContent = 'Employee not found';
+    document.getElementById('errorMessage').textContent = 'The employee you\'re looking for doesn\'t exist or has been removed.';
+    document.getElementById('errorState').classList.remove('hidden');
+    document.getElementById('employeeDetails').classList.add('hidden');
+}
+
+function showPermissionError() {
+    document.getElementById('errorTitle').textContent = 'Access Denied';
+    document.getElementById('errorMessage').textContent = 'You don\'t have permission to access this page. Please contact your administrator if you believe this is an error.';
+    document.getElementById('errorState').classList.remove('hidden');
+    document.getElementById('employeeDetails').classList.add('hidden');
+}
+
+// Edit button functionality
+document.getElementById('editButton').addEventListener('click', function() {
+    window.location.href = `/employees/${employeeId}/edit/`;
+});
+
+// Photo modal functions
+function openPhotoModal(photoUrl, employeeName) {
+    const modal = document.getElementById('photoModal');
+    const modalPhoto = document.getElementById('modalPhoto');
+    
+    if (photoUrl) {
+        modalPhoto.src = photoUrl;
+        modalPhoto.alt = `${employeeName} photo`;
+        modalPhoto.style.display = 'block';
+    } else {
+        // Show placeholder for employees without photo
+        modalPhoto.style.display = 'none';
+        const photoContainer = modal.querySelector('.flex.justify-center');
+        photoContainer.innerHTML = `
+            <div class="h-48 w-48 rounded-full bg-gray-300 flex items-center justify-center">
+                <span class="text-4xl font-semibold text-gray-600">${employeeName.charAt(0).toUpperCase()}</span>
+            </div>
+        `;
+    }
+    
+    modal.classList.remove('hidden');
+    modal.style.display = 'block';
+}
+
+function closePhotoModal() {
+    const modal = document.getElementById('photoModal');
+    modal.classList.add('hidden');
+    modal.style.display = 'none';
+}
+</script>
+{% endblock %} 

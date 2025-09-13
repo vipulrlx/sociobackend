@@ -1,0 +1,619 @@
+{% extends 'web/base.html' %}
+{% load static %}
+
+{% block title %}Login - SkillsNxt{% endblock %}
+
+{% block body %}
+<div class="login-container">
+  <!-- Left side - Brand/Info -->
+  <div class="login-left">
+    <div class="brand-section">
+      <div class="logo">
+        <img src="{% static 'web/img/logo.jpeg' %}" alt="SkillsNxt Logo" class="w-full h-full object-cover">
+      </div>
+      <h1 class="brand-title">RealiSocial.AI</h1>
+      <p class="brand-subtitle">Where AI meets Social Media</p>
+    </div>
+  </div>
+
+  <!-- Right side - Login Form -->
+  <div class="login-right">
+    <div class="login-form-container">
+      <div class="form-header">
+        <h2 class="form-title">Welcome</h2>
+        <p class="form-subtitle">Sign in to your account</p>
+      </div>
+
+      <!-- Error banner -->
+      <div id="error" class="error-banner hidden">
+        <svg class="error-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+          <line x1="15" y1="9" x2="9" y2="15" stroke="currentColor" stroke-width="2"/>
+          <line x1="9" y1="9" x2="15" y2="15" stroke="currentColor" stroke-width="2"/>
+        </svg>
+        <span class="error-text"></span>
+      </div>
+
+      <form id="loginForm" class="login-form">
+        <div class="form-group">
+          <label class="form-label" for="email">Email</label>
+          <input 
+            class="form-input" 
+            type="email" 
+            id="email"
+            name="email" 
+            placeholder="Enter your email" 
+            required
+            autocomplete="email"
+          >
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <div class="password-input-container">
+            <input 
+              class="form-input password-input" 
+              type="password" 
+              id="password"
+              name="password" 
+              placeholder="Enter your password" 
+              required
+              autocomplete="current-password"
+            >
+            <button type="button" class="password-toggle" id="passwordToggle">
+              <svg class="eye-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1 12S5 4 12 4S23 12 23 12S19 20 12 20S1 12 1 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- <div class="form-options">
+          <label class="checkbox-container">
+            <input type="checkbox" class="checkbox-input">
+            <span class="checkbox-custom"></span>
+            <span class="checkbox-label">Remember me</span>
+          </label>
+          <a href="#" class="forgot-password">Forgot password?</a>
+        </div> -->
+
+        <button type="submit" class="login-button">
+          <span class="button-text">Sign In</span>
+        </button>
+      </form>
+
+      <div class="divider">
+        <span class="divider-text">or</span>
+      </div>
+
+      <div id="googleBtn"></div>
+
+      <div class="form-footer">
+        <p class="footer-text">
+          Don't have an account? 
+          <a href="/register/" class="footer-link">Sign up</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+/* Full-screen login layout */
+.login-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+/* Left side - Brand section */
+.login-left {
+  flex: 1;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.login-left::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+  opacity: 0.3;
+}
+
+.brand-section {
+  text-align: center;
+  color: white;
+  z-index: 1;
+  position: relative;
+}
+
+.logo {
+  width: 100px;
+  height: 100px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 2rem;
+  backdrop-filter: blur(10px);
+}
+
+.logo svg {
+  width: 40px;
+  height: 40px;
+  color: white;
+}
+
+.brand-title {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+}
+
+.brand-subtitle {
+  font-size: 1.25rem;
+  opacity: 0.9;
+  font-weight: 300;
+}
+
+/* Right side - Form section */
+.login-right {
+  flex: 1;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.login-form-container {
+  width: 100%;
+  max-width: 400px;
+}
+
+.form-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.form-title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+}
+
+.form-subtitle {
+  color: #6b7280;
+  font-size: 1rem;
+}
+
+/* Error banner */
+.error-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  color: #dc2626;
+  font-size: 0.875rem;
+}
+
+.error-banner.hidden {
+  display: none;
+}
+
+.error-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.error-text {
+  flex: 1;
+}
+
+.login-form {
+  margin-bottom: 2rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 0.5rem;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  background: white;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.password-input-container {
+  position: relative;
+}
+
+.password-input {
+  padding-right: 3rem;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 4px;
+  transition: color 0.2s ease;
+}
+
+.password-toggle:hover {
+  color: #374151;
+}
+
+.eye-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.checkbox-input {
+  display: none;
+}
+
+.checkbox-custom {
+  width: 16px;
+  height: 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.checkbox-input:checked + .checkbox-custom {
+  background: #667eea;
+  border-color: #667eea;
+}
+
+.checkbox-input:checked + .checkbox-custom::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.checkbox-label {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.forgot-password {
+  font-size: 0.875rem;
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.forgot-password:hover {
+  color: #5a67d8;
+}
+
+.login-button {
+  width: 100%;
+  padding: 0.875rem;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.login-button:hover {
+  background: #5a67d8;
+  transform: translateY(-1px);
+}
+
+.divider {
+  text-align: center;
+  margin: 1.5rem 0;
+  position: relative;
+}
+
+.divider::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: #e5e7eb;
+}
+
+.divider-text {
+  background: white;
+  padding: 0 1rem;
+  color: #6b7280;
+  font-size: 0.875rem;
+  position: relative;
+}
+
+.google-button {
+  width: 100%;
+  padding: 0.875rem;
+  background: white;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.google-button:hover {
+  border-color: #9ca3af;
+  background: #f9fafb;
+}
+
+.google-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.form-footer {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+.footer-text {
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+.footer-link {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.footer-link:hover {
+  color: #5a67d8;
+}
+
+/* Loading state */
+.login-button.loading {
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+.login-button.loading .button-text {
+  opacity: 0;
+}
+
+.login-button.loading::after {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border: 2px solid transparent;
+  border-top: 2px solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@keyframes spin {
+  0% { transform: translate(-50%, -50%) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .login-container {
+    flex-direction: column;
+  }
+  
+  .login-left {
+    flex: none;
+    height: 200px;
+    padding: 2rem;
+  }
+  
+  .brand-title {
+    font-size: 2rem;
+  }
+  
+  .brand-subtitle {
+    font-size: 1rem;
+  }
+  
+  .login-right {
+    flex: 1;
+    padding: 1.5rem;
+  }
+  
+  .form-title {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-left {
+    height: 150px;
+    padding: 1rem;
+  }
+  
+  .brand-title {
+    font-size: 1.5rem;
+  }
+  
+  .logo {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .logo svg {
+    width: 30px;
+    height: 30px;
+  }
+  
+  .login-right {
+    padding: 1rem;
+  }
+}
+</style>
+
+<!-- Google Identity script -->
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script>
+  // Check if Google Identity Services loads
+  window.addEventListener('load', function() {
+    setTimeout(function() {
+      if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
+        console.log('Google Identity Services loaded successfully');
+      } else {
+        console.error('Google Identity Services failed to load');
+      }
+    }, 2000);
+  });
+</script>
+
+<script type="module">
+import { login, googleSessionLogin } from "{% static 'web/js/auth.js' %}";
+
+const error = document.getElementById("error");
+const errorText = error.querySelector(".error-text");
+
+function showError(msg) {
+  errorText.textContent = msg;
+  error.classList.remove("hidden");
+}
+
+function hideError() {
+  error.classList.add("hidden");
+}
+
+// Password toggle functionality
+document.getElementById("passwordToggle").addEventListener("click", function() {
+  const passwordInput = document.getElementById("password");
+  const eyeIcon = this.querySelector(".eye-icon");
+  
+  if (passwordInput.type === "password") {
+    passwordInput.type = "text";
+    eyeIcon.innerHTML = `
+      <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20C7 20 2.73 16.89 1 12C2.27 7.11 6.73 4 12 4C13.41 4 14.77 4.3 16.06 4.84L17.94 2.96C16.36 2.18 14.24 1.5 12 1.5C5.5 1.5 1 6.5 1 12C1 17.5 5.5 22.5 12 22.5C14.24 22.5 16.36 21.82 17.94 21.04L17.94 17.94Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M14.12 14.12A3 3 0 1 1 9.88 9.88L14.12 14.12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <line x1="9" y1="9" x2="23" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    `;
+  } else {
+    passwordInput.type = "password";
+    eyeIcon.innerHTML = `
+      <path d="M1 12S5 4 12 4S23 12 23 12S19 20 12 20S1 12 1 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+    `;
+  }
+});
+
+// Form submission with loading state
+document.getElementById("loginForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  hideError();
+  
+  const button = e.target.querySelector(".login-button");
+  const buttonText = button.querySelector(".button-text");
+  
+  // Add loading state
+  button.classList.add("loading");
+  buttonText.textContent = "Signing in...";
+  
+  try {
+    const fd = new FormData(e.target);
+    await login(fd.get("email"), fd.get("password"));
+  } catch (error) {
+    console.error("Login error:", error);
+    showError(error?.response?.data?.detail ?? "Invalid email or password.");
+    // Remove loading state on error
+    button.classList.remove("loading");
+    buttonText.textContent = "Sign In";
+  }
+});
+
+// Google login
+import { renderGoogleButton } from "{% static 'web/js/google.js' %}";
+
+console.log("Google Client ID:", "{{ GOOGLE_CLIENT_ID }}");
+
+renderGoogleButton("googleBtn", "{{ GOOGLE_CLIENT_ID }}", async ({ credential }) => {
+  try {
+     await googleSessionLogin(credential);   // sets session cookie server-side, then redirects
+  } catch (error) {
+     console.error("Google login error:", error);
+     showError(error?.message ?? "Can't continue with Google. Please try again.");
+  }
+});
+
+</script>
+{% endblock %}

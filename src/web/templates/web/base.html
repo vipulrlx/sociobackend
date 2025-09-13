@@ -1,0 +1,84 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Dashboard{% endblock %}</title>
+  <link href="{% static 'web/css/styles.css' %}" rel="stylesheet">
+  <!-- Include Boxicons for the new sidebar -->
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+  <!-- Include sidebar CSS -->
+  <link href="{% static 'web/css/sidebar.css' %}" rel="stylesheet">
+  <!-- Include original dashboard CSS for compatibility -->
+  <link href="{% static 'web/css/dashboard.css' %}" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+  {% block body %}{% endblock %}
+  
+  <!-- Include sidebar JavaScript -->
+  <script src="{% static 'web/js/sidebar.js' %}"></script>
+  
+  <!-- Common JavaScript for navbar functionality -->
+  <script type="module">
+    import { logout, initAuth } from "{% static 'web/js/auth.js' %}";
+    
+    // Initialize authentication check for all pages
+    initAuth();
+    
+    // User dropdown functionality for top navbar (only if elements exist)
+    const userMenuButton = document.getElementById('userMenuButton');
+    const userMenu = document.getElementById('userMenu');
+    let isMenuOpen = false;
+
+    if (userMenuButton && userMenu) {
+      userMenuButton.addEventListener('click', () => {
+        isMenuOpen = !isMenuOpen;
+        userMenu.classList.toggle('hidden', !isMenuOpen);
+        
+        // Rotate chevron
+        const chevron = userMenuButton.querySelector('.fa-chevron-down');
+        if (chevron) {
+          chevron.style.transform = isMenuOpen ? 'rotate(180deg)' : 'rotate(0deg)';
+        }
+      });
+
+      // Close menu when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!userMenuButton.contains(e.target) && !userMenu.contains(e.target)) {
+          isMenuOpen = false;
+          userMenu.classList.add('hidden');
+          const chevron = userMenuButton.querySelector('.fa-chevron-down');
+          if (chevron) {
+            chevron.style.transform = 'rotate(0deg)';
+          }
+        }
+      });
+    }
+
+    // Sidebar menu toggle functionality (for old sidebar if still used)
+    const menuToggles = document.querySelectorAll('.menu-toggle');
+    if (menuToggles.length > 0) {
+      menuToggles.forEach(button => {
+        button.addEventListener('click', () => {
+          const section = button.closest('.menu-section');
+          const submenu = section.querySelector('.submenu');
+          const chevron = button.querySelector('.fa-chevron-down');
+          
+          if (submenu && chevron) {
+            submenu.classList.toggle('hidden');
+            chevron.style.transform = submenu.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
+          }
+        });
+      });
+    }
+
+    // Logout functionality (only if element exists)
+    const logoutButton = document.getElementById("logout");
+    if (logoutButton) {
+      logoutButton.onclick = logout;
+    }
+  </script>
+</body>
+</html>

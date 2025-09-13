@@ -1,0 +1,807 @@
+/* Dashboard specific styles - Firefox Compatible */
+
+/* Adjust font size to make UI appear at proper size */
+html {
+  font-size: 90%; /* Reduce base font size to compensate for removed zoom */
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  background: #f9fafb;
+  overflow-x: hidden;
+}
+
+/* Remove zoom and transform scaling that causes Firefox issues */
+/* body {
+  zoom: 0.8;
+  -moz-transform: scale(0.8);
+  -moz-transform-origin: 0 0;
+} */
+
+/* Ensure full viewport usage with proper units */
+html, body {
+  height: 100vh !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow-x: hidden;
+}
+
+/* Use proper viewport height without compensation */
+html {
+  height: 100vh !important;
+  overflow-y: auto;
+}
+
+body {
+  height: 100vh !important;
+  min-height: 100vh !important;
+}
+
+/* Make dashboard container use full viewport */
+.dashboard-container {
+  height: 100vh !important;
+  width: 100% !important;
+  display: flex !important;
+  min-height: 100vh !important;
+  position: relative;
+}
+
+/* Ensure sidebar takes full height */
+aside {
+  height: 100vh !important;
+  min-height: 100vh !important;
+  flex-shrink: 0;
+  position: relative;
+}
+
+/* FIXED: Ensure main content area uses full remaining width and height */
+main {
+  flex: 1 !important;
+  height: auto !important; /* Changed from 100vh to auto */
+  min-height: 0 !important; /* Changed from 100vh to 0 */
+  overflow-y: visible !important; /* Changed from auto to visible */
+  display: flex !important;
+  flex-direction: column;
+  position: relative;
+}
+
+/* Ensure header spans full width */
+header {
+  width: 100% !important;
+  flex-shrink: 0;
+  position: relative;
+}
+
+/* FIXED: Ensure content inside main uses full available height */
+main > div {
+  flex: 1 !important;
+  min-height: 0;
+  position: relative;
+  overflow-y: auto !important; /* Allow content to scroll */
+}
+
+/* Fix dashboard content spacing */
+main > div > div {
+  margin-bottom: 1.5rem !important;
+}
+
+/* FIXED: Ensure all pages use full viewport but allow content to scroll */
+body > div:first-child {
+  min-height: 100vh !important;
+  height: 100vh !important;
+  width: 100% !important;
+  position: relative;
+  overflow: hidden !important; /* Prevent body scroll */
+}
+
+/* FIXED: Ensure any page container uses full viewport but allows content scroll */
+.page-container,
+.content-container,
+.main-container {
+  min-height: 100vh !important;
+  height: 100vh !important;
+  width: 100% !important;
+  position: relative;
+  overflow: hidden !important; /* Prevent container scroll */
+}
+
+/* FIXED: Ensure the main flex container uses full height */
+.flex.h-screen {
+  height: 100vh !important;
+  min-height: 100vh !important;
+  position: relative;
+  overflow: hidden !important; /* Prevent flex container scroll */
+}
+
+/* Force full height on any container with h-screen class */
+.h-screen {
+  height: 100vh !important;
+  min-height: 100vh !important;
+  position: relative;
+  overflow: hidden !important; /* Prevent h-screen scroll */
+}
+
+/* FIXED: Ensure the main content wrapper uses full height */
+.flex-1 {
+  flex: 1 1 0% !important;
+  min-height: 0;
+  position: relative;
+  overflow-y: auto !important; /* Allow content to scroll */
+}
+
+/* Override any conflicting height styles */
+.bg-gray-50 {
+  height: 100vh !important;
+  min-height: 100vh !important;
+  overflow: hidden !important; /* Prevent background scroll */
+}
+
+/* FIXED: Override height for table containers */
+#employeeTable,
+#employeeTable .overflow-x-auto,
+#employeeTable .relative.overflow-x-auto.shadow-md.sm\\:rounded-lg,
+#employeeTable table,
+#employeeTable thead,
+#employeeTable tbody {
+  height: auto !important;
+  min-height: auto !important;
+  max-height: none !important;
+}
+
+/* FIXED: Ensure the main wrapper div uses full height */
+.flex.h-screen.bg-gray-50 {
+  height: 100vh !important;
+  min-height: 100vh !important;
+  display: flex !important;
+  overflow: hidden !important; /* Prevent main wrapper scroll */
+}
+
+/* Additional aggressive overrides */
+div[class*="flex"][class*="h-screen"] {
+  height: 100vh !important;
+  min-height: 100vh !important;
+  overflow: hidden !important; /* Prevent flex h-screen scroll */
+}
+
+/* Target the specific dashboard container */
+div.dashboard-container {
+  height: 100vh !important;
+  min-height: 100vh !important;
+  width: 100% !important;
+  overflow: hidden !important; /* Prevent dashboard container scroll */
+}
+
+/* FIXED: Ensure the main content area is properly sized */
+main.flex-1 {
+  height: auto !important; /* Changed from 100vh to auto */
+  min-height: 0 !important; /* Changed from 100vh to 0 */
+  flex: 1 1 0% !important;
+  overflow-y: auto !important; /* Allow main content to scroll */
+}
+
+/* FIXED: Employee form pages specific fixes */
+.max-w-6xl.mx-auto {
+  overflow-y: auto !important; /* Allow form content to scroll */
+  height: auto !important;
+  min-height: auto !important;
+}
+
+.bg-white.rounded-lg.shadow-sm.border.border-gray-200.p-4 {
+  overflow-y: visible !important; /* Allow form container to scroll */
+  height: auto !important;
+  min-height: auto !important;
+}
+
+/* FIXED: Employee detail page specific fixes */
+.mx-auto.max-w-7xl.px-4.sm\\:px-6.lg\\:px-8 {
+  overflow-y: auto !important; /* Allow detail content to scroll */
+  height: auto !important;
+  min-height: auto !important;
+}
+
+.mx-auto.max-w-3xl {
+  overflow-y: visible !important; /* Allow detail container to scroll */
+  height: auto !important;
+  min-height: auto !important;
+}
+
+/* Fix table rendering issues */
+table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  position: relative !important;
+}
+
+thead {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+tbody {
+  position: relative !important;
+}
+
+tr {
+  position: relative !important;
+}
+
+th, td {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+/* Fix z-index issues for dropdowns and popups */
+#userMenu,
+.dropdown-menu,
+.popup,
+.modal,
+.absolute {
+  z-index: 9999 !important;
+  position: relative !important;
+}
+
+/* Ensure dropdowns appear above other content */
+[class*="dropdown"],
+[class*="popup"],
+[class*="modal"] {
+  z-index: 9999 !important;
+}
+
+/* Fix for user menu dropdown */
+#userDropdown {
+  position: relative !important;
+  z-index: 9999 !important;
+}
+
+#userMenu {
+  z-index: 10000 !important;
+  position: absolute !important;
+}
+
+/* Modal z-index fixes */
+#deleteModal {
+  z-index: 99999 !important;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  background-color: rgba(75, 85, 99, 0.5) !important;
+}
+
+/* Employee detail page button fixes */
+.inline-flex.items-center.justify-center {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.inline-flex.items-center.justify-center svg {
+  flex-shrink: 0 !important;
+  width: 16px !important;
+  height: 16px !important;
+}
+
+.inline-flex.items-center.justify-center span {
+  white-space: nowrap !important;
+  line-height: 1 !important;
+}
+
+/* Back button specific styling */
+a[href*="employee_list"] {
+  background-color: #ffffff !important;
+  color: #374151 !important;
+  border: 1px solid #d1d5db !important;
+  border-radius: 0.375rem !important;
+  padding: 0.5rem 1rem !important;
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  text-decoration: none !important;
+  transition: all 0.2s ease-in-out !important;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+}
+
+a[href*="employee_list"]:hover {
+  background-color: #f9fafb !important;
+  color: #111827 !important;
+  border-color: #9ca3af !important;
+}
+
+a[href*="employee_list"]:focus {
+  outline: none !important;
+  ring: 2px !important;
+  ring-offset: 2px !important;
+  ring-color: #3b82f6 !important;
+}
+
+/* Edit button specific styling */
+#editButton {
+  background-color: #2563eb !important;
+  color: #ffffff !important;
+  border: 1px solid transparent !important;
+  border-radius: 0.375rem !important;
+  padding: 0.5rem 1rem !important;
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  transition: all 0.2s ease-in-out !important;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+}
+
+#editButton:hover {
+  background-color: #1d4ed8 !important;
+  color: #ffffff !important;
+}
+
+#editButton:focus {
+  outline: none !important;
+  ring: 2px !important;
+  ring-offset: 2px !important;
+  ring-color: #3b82f6 !important;
+}
+
+/* Button container fixes */
+.flex.items-center.space-x-3 {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.75rem !important;
+}
+
+/* Photo modal fixes */
+#photoModal {
+  z-index: 99999 !important;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  background-color: rgba(0, 0, 0, 0.75) !important;
+}
+
+#photoModal .flex.items-center.justify-center {
+  z-index: 100000 !important;
+  position: relative !important;
+}
+
+#photoModal .relative.max-w-4xl.mx-auto {
+  z-index: 100001 !important;
+  position: relative !important;
+  background-color: white !important;
+  border-radius: 0.5rem !important;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
+}
+
+#modalPhoto {
+  max-width: 100% !important;
+  max-height: 24rem !important;
+  object-fit: contain !important;
+  border-radius: 0.5rem !important;
+}
+
+/* Photo hover effects */
+.cursor-pointer.hover\\:opacity-80:hover {
+  opacity: 0.8 !important;
+}
+
+/* Readonly field styling */
+input[disabled] {
+  background-color: #f9fafb !important;
+  color: #374151 !important;
+  cursor: not-allowed !important;
+  opacity: 0.7 !important;
+}
+
+input[disabled]:focus {
+  outline: none !important;
+  ring: none !important;
+  border-color: #d1d5db !important;
+}
+
+/* Ensure disabled fields show their values */
+input[disabled][value] {
+  color: #374151 !important;
+  background-color: #f9fafb !important;
+}
+
+/* Force disabled input values to be visible */
+input[disabled] {
+  color: #374151 !important;
+  background-color: #f9fafb !important;
+  -webkit-text-fill-color: #374151 !important;
+  opacity: 1 !important;
+}
+
+/* Specific fix for username field */
+#user_username {
+  color: #374151 !important;
+  background-color: #f9fafb !important;
+  -webkit-text-fill-color: #374151 !important;
+  opacity: 1 !important;
+}
+
+#user_username[value] {
+  color: #374151 !important;
+  -webkit-text-fill-color: #374151 !important;
+}
+
+#deleteModal .flex.items-center.justify-center {
+  z-index: 100000 !important;
+  position: relative !important;
+}
+
+#deleteModal .relative.bg-white.rounded-lg.shadow-xl {
+  z-index: 100001 !important;
+  position: relative !important;
+  background-color: white !important;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
+}
+
+/* Fix for any absolute positioned elements */
+.absolute {
+  z-index: 9999 !important;
+}
+
+/* Ensure buttons and interactive elements are clickable */
+button,
+a,
+[role="button"] {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+/* Fix for form elements */
+input,
+select,
+textarea {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+/* Fix password toggle icon positioning */
+.password-input-container {
+  position: relative !important;
+}
+
+.password-toggle {
+  position: absolute !important;
+  right: 12px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  background: none !important;
+  border: none !important;
+  color: #6b7280 !important;
+  cursor: pointer !important;
+  padding: 4px !important;
+  border-radius: 4px !important;
+  transition: color 0.2s ease !important;
+  z-index: 10 !important;
+}
+
+.password-toggle:hover {
+  color: #374151 !important;
+}
+
+.eye-icon {
+  width: 18px !important;
+  height: 18px !important;
+}
+
+/* Fix for password input padding */
+.password-input {
+  padding-right: 40px !important;
+}
+
+/* Fix plus icon size in employee list empty state */
+.submit-button svg {
+  width: 16px !important;
+  height: 16px !important;
+  flex-shrink: 0 !important;
+}
+
+/* Fix any other plus icons that might be too large */
+.w-4.h-4 {
+  width: 16px !important;
+  height: 16px !important;
+}
+
+/* Smooth transitions for menu interactions */
+.menu-toggle {
+  transition: all 0.2s ease-in-out;
+}
+
+.submenu {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Custom scrollbar for sidebar */
+aside::-webkit-scrollbar {
+  width: 4px;
+}
+
+aside::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+aside::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 2px;
+}
+
+aside::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* Hover effects for cards */
+.card-hover {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Gradient backgrounds */
+.gradient-bg {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* Custom animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .sidebar.open {
+    transform: translateX(0);
+  }
+}
+
+/* Chart container styling */
+.chart-container {
+  position: relative;
+  height: 320px;
+  width: 100%;
+}
+
+/* Notification badge animation */
+.notification-badge {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+} 
+
+/* Employee table fixes */
+#employeeTable {
+  width: 100% !important;
+  overflow-x: auto !important;
+}
+
+#employeeTable .overflow-x-auto {
+  width: 100% !important;
+  min-width: 100% !important;
+}
+
+#employeeTable thead th {
+  background-color: #f9fafb !important;
+  color: #374151 !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  font-size: 0.75rem !important;
+  line-height: 1rem !important;
+  padding: 0.5rem 1.5rem !important;
+  border-bottom: 1px solid #e5e7eb !important;
+  white-space: nowrap !important;
+  height: auto !important;
+  min-height: 40px !important;
+  max-height: 50px !important;
+  vertical-align: middle !important;
+}
+
+#employeeTable tbody tr {
+  background-color: #ffffff !important;
+  border-bottom: 1px solid #e5e7eb !important;
+}
+
+#employeeTable tbody tr:hover {
+  background-color: #f9fafb !important;
+}
+
+#employeeTable tbody td {
+  padding: 1rem 1.5rem !important;
+  vertical-align: top !important;
+  color: #6b7280 !important;
+}
+
+#employeeTable tbody th {
+  padding: 1rem 1.5rem !important;
+  vertical-align: top !important;
+  color: #111827 !important;
+  font-weight: 500 !important;
+}
+
+#employeeTable .bg-blue-100 {
+  background-color: #dbeafe !important;
+}
+
+#employeeTable .text-blue-800 {
+  color: #1e40af !important;
+}
+
+#employeeTable .text-xs {
+  font-size: 0.75rem !important;
+  line-height: 1rem !important;
+}
+
+#employeeTable .font-medium {
+  font-weight: 500 !important;
+}
+
+#employeeTable .rounded-full {
+  border-radius: 9999px !important;
+}
+
+#employeeTable .flex.items-center.space-x-3 {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.75rem !important;
+}
+
+#employeeTable .p-2 {
+  padding: 0.5rem !important;
+}
+
+#employeeTable button:hover {
+  background-color: #eff6ff !important;
+}
+
+#employeeTable .text-blue-600 {
+  color: #2563eb !important;
+}
+
+#employeeTable .text-yellow-600 {
+  color: #ca8a04 !important;
+}
+
+#employeeTable .text-red-600 {
+  color: #dc2626 !important;
+}
+
+#employeeTable .text-lg {
+  font-size: 1.125rem !important;
+  line-height: 1.75rem !important;
+}
+
+#employeeTable .font-medium.text-gray-900 {
+  font-weight: 500 !important;
+  color: #111827 !important;
+}
+
+#employeeTable .text-xs.text-gray-500 {
+  font-size: 0.75rem !important;
+  line-height: 1rem !important;
+  color: #6b7280 !important;
+}
+
+#employeeTable .mt-1 {
+  margin-top: 0.25rem !important;
+}
+
+@media (max-width: 768px) {
+  #employeeTable .overflow-x-auto {
+    overflow-x: scroll !important;
+  }
+  
+  #employeeTable table {
+    min-width: 800px !important;
+  }
+}
+
+/* Ensure table body is visible */
+#employeeTable tbody {
+  display: table-row-group !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+#employeeTable tbody tr {
+  display: table-row !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  height: auto !important;
+  min-height: 50px !important;
+  max-height: 70px !important;
+}
+
+/* Debug styles to make sure table is visible */
+#employeeTable {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+#employeeTable table {
+  display: table !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  width: 100% !important;
+}
+
+#employeeTable thead {
+  display: table-header-group !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+#employeeTable thead tr {
+  height: auto !important;
+  min-height: 40px !important;
+  max-height: 50px !important;
+}
+
+/* Firefox-specific fixes */
+@-moz-document url-prefix() {
+  /* Fix for Firefox layout issues */
+  body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  /* Ensure proper flex behavior in Firefox */
+  .home_content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Fix for Firefox viewport height issues */
+  .sidebar {
+    height: 100vh !important;
+    min-height: 100vh !important;
+  }
+  
+  /* Ensure main content uses full available space */
+  main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Fix for Firefox absolute positioning */
+  .absolute {
+    position: absolute !important;
+  }
+  
+  /* Ensure proper stacking context in Firefox */
+  .relative {
+    position: relative !important;
+  }
+} 

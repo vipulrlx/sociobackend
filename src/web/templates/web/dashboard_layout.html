@@ -1,0 +1,304 @@
+{% extends 'web/base.html' %}
+{% load static %}
+
+{% block body %}
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="logo_item">
+    <i class="bx bx-menu" id="sidebarOpen"></i>
+    <img src="{% static 'web/img/logo.jpeg' %}" alt="SkillsNxt Logo">
+    <span>SkillsNxt</span>
+  </div>
+
+
+  <div class="navbar_content">
+    
+    <!-- User Profile Dropdown -->
+    <div class="relative" id="userDropdown">
+      <button class="flex items-center space-x-3 p-2 hover:bg-gray-100 rounded-lg transition-colors duration-200" id="userMenuButton">
+        <div class="w-8 h-8 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full flex items-center justify-center">
+          <span class="text-white text-sm font-medium" id="userInitials"></span>
+        </div>
+        <div class="text-left">
+          <div class="text-sm font-medium text-gray-800" id="userName"></div>
+          <div class="text-xs text-gray-500" id="userType"></div>
+        </div>
+        <i class="fas fa-chevron-down text-xs text-gray-500"></i>
+      </button>
+
+      <!-- Dropdown Menu -->
+      <div class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 hidden" id="userMenu" style="z-index: 10000;">
+        <a href="/change-password/" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200">
+          <i class="fas fa-key mr-2"></i>Change Password
+        </a>
+        <hr class="my-2 border-gray-200">
+        <button id="logout" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors duration-200">
+          <i class="fas fa-sign-out-alt mr-2"></i>Logout
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Sidebar -->
+<nav class="sidebar">
+  <div class="logo_details">
+    <img src="{% static 'web/img/logo.jpeg' %}" alt="SkillsNxt Logo" class="icon">
+    <span class="logo_name">SkillsNxt</span>
+    <i class="bx bx-menu" id="sidebar_btn"></i>
+  </div>
+
+  <ul class="nav_list" id="dynamicMenus">
+    <!-- Dynamic menus will be loaded here -->
+  </ul>
+</nav>
+
+<!-- Main Content -->
+<section class="home_content">
+  <!-- <div class="text">
+    {% block page_title %}Dashboard{% endblock %}
+  </div> -->
+  
+  <main class="main-content">
+    {% block content %}{% endblock %}
+  </main>
+</section>
+
+{% block extra_js %}{% endblock %}
+
+<script type="module">
+import { API } from "{% static 'web/js/api.js' %}";
+import { logout, initAuth, getCurrentUser } from "{% static 'web/js/auth.js' %}";
+
+// Initialize authentication check
+initAuth();
+
+// Function to render dynamic menus
+function renderMenus(menus) {
+  const dynamicMenusContainer = document.getElementById('dynamicMenus');
+  
+  if (!dynamicMenusContainer) {
+    console.error('dynamicMenusContainer not found!');
+    return;
+  }
+
+  let menuHTML = '';
+  
+  // Group menus by sections
+  const menuSections = {};
+  
+  menus.forEach(menu => {
+    const section = menu.section || 'main';
+    if (!menuSections[section]) {
+      menuSections[section] = [];
+    }
+    menuSections[section].push(menu);
+  });
+  
+  // Render each section
+  Object.keys(menuSections).forEach(sectionName => {
+    const sectionMenus = menuSections[sectionName];
+    
+    // Add section title if not main
+    if (sectionName !== 'main') {
+      menuHTML += `<div class="menu_section">
+        <div class="menu_title">${sectionName}</div>
+      </div>`;
+    }
+    
+    sectionMenus.forEach(menu => {
+      if (menu.submenus && menu.submenus.length > 0) {
+        // Menu with submenus
+        const hasActiveSubmenu = menu.submenus.some(submenu => {
+          const isMatch = window.location.pathname === submenu.destination_url || 
+                         window.location.pathname === submenu.destination_url.replace(/\/$/, '') ||
+                         window.location.pathname === submenu.destination_url + '/';
+          return isMatch;
+        });
+        
+        menuHTML += `
+          <li class="${hasActiveSubmenu ? 'active showMenu' : ''}">
+            <a href="#" class="submenu_item">
+              <i class="${menu.icon}"></i>
+              <span class="link_name">${menu.display_name}</span>
+              <i class="bx bx-chevron-right arrow"></i>
+            </a>
+            <ul class="sub_menu">
+        `;
+        
+        menu.submenus.forEach(submenu => {
+          const isActive = window.location.pathname === submenu.destination_url || 
+                          window.location.pathname === submenu.destination_url.replace(/\/$/, '') ||
+                          window.location.pathname === submenu.destination_url + '/';
+          menuHTML += `
+            <li>
+              <a href="${submenu.destination_url}" class="${isActive ? 'active' : ''}">
+                <i class="${submenu.icon || 'bx bx-circle'}"></i>
+                <span class="link_name">${submenu.display_name}</span>
+              </a>
+            </li>
+          `;
+        });
+        
+        menuHTML += `
+            </ul>
+          </li>
+        `;
+      } else if (menu.destination_url && menu.destination_url !== '#') {
+        // Single menu item with URL
+        const isActive = window.location.pathname === menu.destination_url || 
+                        window.location.pathname === menu.destination_url.replace(/\/$/, '') ||
+                        window.location.pathname === menu.destination_url + '/';
+        menuHTML += `
+          <li class="${isActive ? 'active' : ''}">
+            <a href="${menu.destination_url}">
+              <i class="${menu.icon}"></i>
+              <span class="link_name">${menu.display_name}</span>
+            </a>
+          </li>
+        `;
+      }
+    });
+  });
+  
+  dynamicMenusContainer.innerHTML = menuHTML;
+  
+  // Re-attach submenu functionality
+  if (window.Sidebar && window.Sidebar.initSubmenuHandlers) {
+    window.Sidebar.initSubmenuHandlers();
+  } else {
+    // Fallback if Sidebar object is not available
+    const submenuItems = document.querySelectorAll(".submenu_item");
+    submenuItems.forEach((item, index) => {
+      item.addEventListener("click", (e) => {
+        e.preventDefault();
+        const parentLi = item.closest('li');
+        const sidebar = document.querySelector('.sidebar');
+        
+        if (sidebar.classList.contains("compressed")) {
+          // In compressed mode, expand sidebar and show submenu
+          sidebar.classList.remove("compressed");
+          
+          // Small delay to ensure sidebar expansion animation completes
+          setTimeout(() => {
+            parentLi.classList.add("showMenu");
+            
+            // Close other submenus
+            submenuItems.forEach((item2, index2) => {
+              if (index !== index2) {
+                item2.closest('li').classList.remove("showMenu");
+              }
+            });
+          }, 300); // Wait for sidebar expansion animation
+        } else {
+          // In expanded mode, toggle the submenu
+          parentLi.classList.toggle("showMenu");
+          
+          // Close other submenus
+          submenuItems.forEach((item2, index2) => {
+            if (index !== index2) {
+              item2.closest('li').classList.remove("showMenu");
+            }
+          });
+        }
+      });
+    });
+  }
+}
+
+// Fallback menu function
+function renderFallbackMenus() {
+  console.log('No menus found in database, showing fallback sidebar');
+  const dynamicMenusContainer = document.getElementById('dynamicMenus');
+  if (dynamicMenusContainer) {
+    dynamicMenusContainer.innerHTML = `
+      <li>
+        <a href="/">
+          <i class="bx bx-home-alt"></i>
+          <span class="link_name">Dashboard</span>
+        </a>
+      </li>
+      <li>
+        <a href="/employees/">
+          <i class="bx bx-user"></i>
+          <span class="link_name">Employee Management</span>
+        </a>
+      </li>
+      <li>
+        <a href="/create-employee/">
+          <i class="bx bx-user-plus"></i>
+          <span class="link_name">Add Employee</span>
+        </a>
+      </li>
+    `;
+  }
+}
+
+// Wait for DOM to be ready
+document.addEventListener('DOMContentLoaded', async () => {
+  // Load dynamic menus with category filter (default to 'web')
+  try {
+    const category = 'web'; // Default category
+    const menuResponse = await API.get(`menu/list/?category=${category}`);
+    
+    if (menuResponse.data.success && menuResponse.data.menus && menuResponse.data.menus.length > 0) {
+      renderMenus(menuResponse.data.menus);
+    } else {
+      renderFallbackMenus();
+    }
+  } catch (error) {
+    console.error('Error loading menus:', error);
+    renderFallbackMenus();
+  }
+
+  // Update user info
+  try {
+    const { data } = await API.get("user/details/");
+    console.log('User details received:', data);
+    
+    if (data.user && data.user.status === 'active') {
+      const userName = data.user.email.split('@')[0];
+      console.log('Setting user name to:', userName);
+      
+      const userNameElement = document.getElementById("userName");
+      const userInitialsElement = document.getElementById("userInitials");
+      const userTypeElement = document.getElementById("userType");
+
+      if (userNameElement) {
+        userNameElement.textContent = userName;
+      }
+      
+      if (userInitialsElement) {
+        const initials = userName.split(' ').map(n => n[0]).join('').toUpperCase();
+        userInitialsElement.textContent = initials || userName[0].toUpperCase();
+      }
+
+      if (userTypeElement && data.user.user_type) {
+        // Capitalize first letter and display user type
+        const userType = data.user.user_type.charAt(0).toUpperCase() + data.user.user_type.slice(1);
+        userTypeElement.textContent = userType;
+      }
+      
+    } else {
+      console.log('User not active or not found, logging out...');
+      logout();
+    }
+  } catch (error) {
+    console.error('Error fetching user details:', error);
+    if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+      console.log('User unauthorized, logging out...');
+      logout();
+    }
+  }
+
+  // Handle logout
+  const logoutButton = document.getElementById("logout");
+  if (logoutButton) {
+    logoutButton.addEventListener("click", () => {
+      logout();
+    });
+  }
+});
+</script>
+
+{% endblock %} 
