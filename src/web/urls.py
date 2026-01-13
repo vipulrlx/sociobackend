@@ -1,5 +1,5 @@
 from django.urls import path, include
-from .api.views import auth, employee, user, webview, dashboard
+from .api.views import auth, employee, user, webview, dashboard, business, product, lead, elwebhook
 
 app_name = "web"
 urlpatterns = [
@@ -23,4 +23,19 @@ urlpatterns = [
     
     # API routes
     path("api/v1/getwebview1/", webview.Webview1View.as_view(), name="getwebview1"),
+
+    # API business
+    path("api/v1/business/", business.BusinessListCreateView.as_view(), name="addbusiness"),
+    path('api/v1/business/<int:pk>/', business.BusinessRetrieveUpdateView.as_view(), name="updatebusiness"),
+
+    # API product
+    path("api/v1/product/", product.ProductListCreateView.as_view(), name="addproduct"),
+    path('api/v1/product/<int:pk>/', product.ProductRetrieveUpdateView.as_view(), name="updateproduct"),
+
+    #ElevelLab
+    path('api/v1/webhook/elevenlabs/', elwebhook.ElevenLabsWebhookView.as_view(), name="elevellabs"),
+
+    #Lead API
+    path('api/v1/leads/', lead.LeadListView.as_view(), name="addleads"),
+    path('api/v1/leads/<int:pk>/', lead.LeadDetailView.as_view(), name="updateleads"),   
 ]

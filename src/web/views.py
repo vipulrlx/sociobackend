@@ -21,3 +21,13 @@ from .api.views.employee import (
     web_employee_detail_view as employee_detail_view,
     web_employee_edit_view as employee_edit_view
 )
+
+from .api.views.business import (
+    BusinessListCreateView as BusinessListCreateView,
+    BusinessRetrieveUpdateView as BusinessRetrieveUpdateView
+)
+
+from .api.views.product import (
+    ProductListCreateView as ProductListCreateView,
+    ProductRetrieveUpdateView as ProductRetrieveUpdateView
+)
