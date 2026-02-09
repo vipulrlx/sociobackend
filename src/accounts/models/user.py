@@ -35,6 +35,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     status = models.CharField(max_length=10,
                               choices=Status.choices,
                               default=Status.ACTIVE)
+    initialsetup = models.CharField(max_length=4,
+                              default="0")
     created_at = models.DateTimeField(default=timezone.now)
 
     # Django internals

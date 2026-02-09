@@ -8,6 +8,7 @@ class RegisterSerializer(serializers.ModelSerializer):
     contact_number = serializers.CharField(required=False, max_length=20)
     country_code = serializers.CharField(required=False, default="+91")
     name = serializers.CharField(required=False)
+    initialsetup = serializers.CharField(required=False, default="1")
 
     class Meta:
         model = User

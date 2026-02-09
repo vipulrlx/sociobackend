@@ -1,5 +1,5 @@
 from django.urls import path, include
-from .api.views import auth, employee, user, webview, dashboard, business, product, lead, elwebhook
+from .api.views import auth, employee, user, webview, dashboard, business, product, lead, elwebhook, websiteanalysis
 
 app_name = "web"
 urlpatterns = [
@@ -37,5 +37,12 @@ urlpatterns = [
 
     #Lead API
     path('api/v1/leads/', lead.LeadListView.as_view(), name="addleads"),
-    path('api/v1/leads/<int:pk>/', lead.LeadDetailView.as_view(), name="updateleads"),   
+    path('api/v1/leads/<int:pk>/', lead.LeadDetailView.as_view(), name="updateleads"), 
+
+    #Website API
+    path("api/v1/analyze-website/", websiteanalysis.WebsiteMarketingAnalyzerView.as_view(), name="analyze-website"),
+    path("api/v1/styleupdate/", websiteanalysis.BrandStyleUpdateView.as_view(), name="styleupdate"),
+    path("api/v1/getbranddetails/", websiteanalysis.BrandDetailView.as_view(), name="getbranddetails"),
+    path("api/v1/getsocialposts/", websiteanalysis.BrandSocialStrategyView.as_view(), name="getsocialposts"),
+
 ]

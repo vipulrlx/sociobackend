@@ -58,13 +58,13 @@ def get_user_phone(user):
     try:
         # Check if user has a student profile
         student = user.students.first()
-        if student and student.contact_number:
-            return student.contact_number
+        if student and student.phone:
+            return student.phone
         
         # Check if user has an employee profile
         employee = user.employees.first()
-        if employee and employee.contact_number:
-            return employee.contact_number
+        if employee and employee.phone:
+            return employee.phone
         
         return ""
     except Exception:
@@ -174,10 +174,9 @@ def create_user_profile(user, platform, name=None, category=None, phone="", coun
                 user=user,
                 full_name=name,
                 enrollment_date=timezone.now().date(),
-                contact_number=phone,
+                phone=phone,
                 country_code=country_code,
             )
-
             # Auto-assign Student role if available
             try:
                 student_role = Role.objects.get(name='Student', is_active=True)
@@ -198,6 +197,17 @@ def create_user_profile(user, platform, name=None, category=None, phone="", coun
                 contact_number=phone,
                 country_code=country_code,
             )
+
+            # Auto-assign User role if available
+            try:
+                employee_role = Role.objects.get(name='User', is_active=True)
+                user.role = employee_role
+                user.save(update_fields=['role'])
+                print(f"✅ Auto-assigned User role to user {user.email}")
+            except Role.DoesNotExist:
+                # Student role doesn't exist, user will have no role
+                print(f"⚠️  User role not found for user {user.email}")
+                pass
     else:
         # Use platform-based logic when category is not provided
         if platform == 'web':
@@ -210,15 +220,26 @@ def create_user_profile(user, platform, name=None, category=None, phone="", coun
                 contact_number=phone,
                 country_code=country_code,
             )
+
+            # Auto-assign User role if available
+            try:
+                employee_role = Role.objects.get(name='User', is_active=True)
+                user.role = employee_role
+                user.save(update_fields=['role'])
+                print(f"✅ Auto-assigned User role to user {user.email}")
+            except Role.DoesNotExist:
+                # Student role doesn't exist, user will have no role
+                print(f"⚠️  User role not found for user {user.email}")
+                pass
+
         else:
             Student.objects.create(
                 user=user,
                 full_name=name,
                 enrollment_date=timezone.now().date(),
-                contact_number=phone,
+                phone=phone,
                 country_code=country_code,
             )
-
             # Auto-assign Student role if available
             try:
                 student_role = Role.objects.get(name='Student', is_active=True)
@@ -229,6 +250,7 @@ def create_user_profile(user, platform, name=None, category=None, phone="", coun
                 # Student role doesn't exist, user will have no role
                 print(f"⚠️  Student role not found for user {user.email}")
                 pass
+
 
 class CategoryView(APIView):
     permission_classes = [AllowAny]
@@ -249,12 +271,8 @@ class RegisterView(APIView):
 
     def post(self, request):
         try:
-            # Get platform from request parameter, default to 'web' if not provided
-            platform = request.data.get('platform', 'web')
+            platform = detect_platform(request)
             
-            # automatic platform detection for future use
-            # platform = detect_platform(request)
-
             data = request.data.copy()
             data['platform'] = platform
             
@@ -303,6 +321,7 @@ class RegisterView(APIView):
                 "message": "Registration failed. Please check your data and try again.",
                 "errors": str(e)
             }, status=status.HTTP_400_BAD_REQUEST)
+
 
 class CustomLoginView(APIView):
     permission_classes = [AllowAny]
@@ -364,6 +383,7 @@ class CustomLoginView(APIView):
                 "name": get_user_name(user),
                 "photo_url": get_user_photo_url(user, request),
                 "status": user.status,
+                "initialsetup": user.initialsetup,
                 "device_token_key": user.device_token_key,
                 "user_type": user_type,
             }
@@ -434,6 +454,7 @@ class LoginotpView(APIView):
                     "name": get_user_name(user),
                     "photo_url": get_user_photo_url(user, request),
                     "status": user.status,
+                    "initialsetup": user.initialsetup,
                     "device_token_key": user.device_token_key,
                     "user_type": user_type,
                 }
