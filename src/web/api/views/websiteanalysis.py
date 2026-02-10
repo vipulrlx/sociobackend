@@ -111,6 +111,11 @@ class BrandStyleUpdateView(APIView):
 
         brand.save()
 
+        # ✅ FINAL STEP OF INITIAL SETUP
+        if user.initialsetup != "0":
+            user.initialsetup = "0"
+            user.save(update_fields=["initialsetup"])
+            
         return Response(
             {
                 "message": "Brand style updated successfully",
