@@ -12,7 +12,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ("email", "contact_number", "password", "device_token_key", "platform", "category", "country_code", "name")
+        fields = ("email", "contact_number", "password", "device_token_key", "platform", "category", "country_code", "name","initialsetup")
 
     def create(self, validated_data):
         platform = validated_data.pop('platform', 'web')
