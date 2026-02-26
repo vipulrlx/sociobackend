@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import json
+import os
 from google.oauth2 import service_account
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -175,8 +176,8 @@ STATICFILES_DIRS = [
 ]
 
 # Media files (User uploaded content)
-# MEDIA_URL = "/media/"
-# MEDIA_ROOT = BASE_DIR / "media"
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -204,6 +205,11 @@ GOOGLE_OAUTH_CLIENT_ID_IOS = env("GOOGLE_OAUTH_CLIENT_ID_IOS", default="")
 
 # GEMINI
 GEMINI_API_KEY = env("GEMINI_API_KEY")
+
+# Eleven Labs
+ELEVENLABS_API_KEY = env("ELEVENLABS_API_KEY")
+ELEVENLABS_AGENT_ID = env("ELEVENLABS_AGENT_ID")
+ELEVENLABS_AGENT_PHONE_NUMBER_ID = env("ELEVENLABS_AGENT_PHONE_NUMBER_ID")
 
 # CORS Configuration
 CORS_ALLOW_ALL_ORIGINS = True  # For development only

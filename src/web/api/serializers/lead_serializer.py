@@ -1,16 +1,15 @@
 from rest_framework import serializers
-from web.models.lead import Lead
-from web.models.call_log import CallLog
-
-class CallLogSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CallLog
-        fields = '__all__'
+from web.models.lead import Lead, LeadFollowUp
 
 
 class LeadSerializer(serializers.ModelSerializer):
-    calls = CallLogSerializer(many=True, read_only=True)
-
     class Meta:
         model = Lead
-        fields = '__all__'
+        fields = "__all__"
+        read_only_fields = ("user",)
+
+
+class LeadFollowUpSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LeadFollowUp
+        fields = "__all__"

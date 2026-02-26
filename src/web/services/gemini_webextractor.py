@@ -130,3 +130,54 @@ Ensure:
     )
 
     return response.text
+
+def generate_daily_trending_posts(brand_payload: dict) -> str:
+    """
+    Generates 5 trending daily posts with AI image prompts
+    tailored to the brand.
+    """
+
+    prompt = f"""
+You are a senior social media strategist and viral content expert.
+
+Using the brand details below, generate DAILY TRENDING social media posts.
+
+Brand Details (JSON):
+{json.dumps(brand_payload, indent=2)}
+
+Requirements:
+
+- Generate EXACTLY 7 high-performing trending posts
+- Posts must be suitable for modern social media algorithms
+- Optimize for engagement and shareability
+- Align with brand tone and audience
+- Include strong visual direction
+
+Return STRICT JSON in this format:
+
+- daily_trending_posts (array of 5 objects)
+
+Each post object must contain:
+
+- post_title
+- target_platform (Instagram / LinkedIn / Facebook / X etc.)
+- content_type (Reel / Carousel / Image / Video)
+- caption
+- hook
+- hashtags (array)
+- image_idea
+- image_prompt (VERY detailed prompt for generative AI image)
+- recommended_posting_time
+
+Make posts feel fresh, viral, and trend-aware.
+"""
+
+    response = model.generate_content(
+        prompt,
+        generation_config={
+            "temperature": 0.8,  # slightly higher for creativity
+            "response_mime_type": "application/json"
+        }
+    )
+
+    return response.text

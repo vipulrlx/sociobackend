@@ -36,13 +36,19 @@ urlpatterns = [
     path('api/v1/webhook/elevenlabs/', elwebhook.ElevenLabsWebhookView.as_view(), name="elevellabs"),
 
     #Lead API
-    path('api/v1/leads/', lead.LeadListView.as_view(), name="addleads"),
-    path('api/v1/leads/<int:pk>/', lead.LeadDetailView.as_view(), name="updateleads"), 
+    path('api/v1/leads/', lead.LeadListView.as_view(), name="listleads"),
+    path('api/v1/createleads/', lead.CreateLeadView.as_view(), name="createlead"), 
+    path('api/v1/updatelead/<int:lead_id>/', lead.UpdateLeadView.as_view(), name="updatelead"), 
+    path('api/v1/leaddetails/<int:lead_id>/', lead.LeadDetailView.as_view(), name="leaddetails"), 
+    path('api/v1/addleadfollowup/<int:lead_id>/', lead.AddLeadFollowupView.as_view(), name="addfollowup"), 
+    path('api/v1/initiateaicall/<int:lead_id>/', lead.InitiateAICallView.as_view(), name="initiateaicall"), 
+    path('api/v1/elwebhook/', lead.ElevenLabsWebhookView.as_view(), name="elwebhook"), 
 
     #Website API
     path("api/v1/analyze-website/", websiteanalysis.WebsiteMarketingAnalyzerView.as_view(), name="analyze-website"),
     path("api/v1/styleupdate/", websiteanalysis.BrandStyleUpdateView.as_view(), name="styleupdate"),
     path("api/v1/getbranddetails/", websiteanalysis.BrandDetailView.as_view(), name="getbranddetails"),
     path("api/v1/getsocialposts/", websiteanalysis.BrandSocialStrategyView.as_view(), name="getsocialposts"),
+    path("api/v1/dailyposts/", websiteanalysis.DailyTrendingPostsView.as_view(), name="dailyposts"),
 
 ]
